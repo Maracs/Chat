@@ -1,3 +1,7 @@
+using DataAccessLayer.Data;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
+
 namespace PresentationLayer
 {
     public class Program
@@ -7,6 +11,14 @@ namespace PresentationLayer
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
+            builder.Services.AddDbContext<DatabaseContext>(options =>
+            {
+
+                options.UseSqlServer(
+                    builder.Configuration.GetConnectionString("Default"),
+                    builder => builder.MigrationsAssembly("Modsenfy.DataAccessLayer"));
+                options.LogTo(Console.WriteLine);
+            });
 
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
