@@ -1,4 +1,7 @@
+using BusinessLayer.Extentions;
+using BusinessLayer.Services;
 using DataAccessLayer.Data;
+using DataAccessLayer.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 
@@ -20,6 +23,25 @@ namespace PresentationLayer
                 options.LogTo(Console.WriteLine);
             });
 
+
+            builder.Services.AddScoped<BlockingsRepository>();
+            builder.Services.AddScoped<FriendsRepository>();
+            builder.Services.AddScoped<RolesRepository>();
+            builder.Services.AddScoped<StatusesRepository>();
+            builder.Services.AddScoped<UsersRepository>();
+
+
+            builder.Services.AddScoped<BlockingsService>();
+            builder.Services.AddScoped<FriendsService>();
+            builder.Services.AddScoped<RolesService>();
+            builder.Services.AddScoped<StatusesService>();
+            builder.Services.AddScoped<TokensService>();
+            builder.Services.AddScoped<UsersService>();
+
+            builder.Services.AddIdentityService(builder.Configuration);
+            builder.Services.AddSwaggerService();
+
+
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
@@ -34,6 +56,7 @@ namespace PresentationLayer
                 app.UseSwaggerUI();
             }
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
 

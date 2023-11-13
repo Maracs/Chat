@@ -12,7 +12,7 @@ namespace DataAccessLayer.Entities
         [Key]
         public int Id { get; set; }
 
-        public string Login { get; set; }
+        public string AccountName { get; set; }
 
         public string Passhash { get; set; }
 
