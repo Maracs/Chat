@@ -48,7 +48,7 @@ namespace DataAccessLayer.Repositories
             await _databaseContext.SaveChangesAsync();
         }
 
-        public void UpdateAsync(T entity)
+        public void Update(T entity)
         {
             _databaseContext.Update(entity);
         }

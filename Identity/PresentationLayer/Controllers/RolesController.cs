@@ -1,4 +1,5 @@
-﻿using BusinessLayer.Services;
+﻿using BusinessLayer.DTOs;
+using BusinessLayer.Services;
 using DataAccessLayer.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -21,20 +22,23 @@ namespace PresentationLayer.Controllers
         [Authorize]
         public async Task<ActionResult<List<Role>>> GetRolesAsync()
         {
-            return Ok();
+            return Ok(await _roleService.GetRolesAsync());
         }
 
         [HttpPost]
-        [Authorize]
+        [Authorize(Roles ="admin")]
         public async Task<ActionResult> AddRoleAsync([FromBody] string role)
         {
+            await _roleService.AddRoleAsync(role);
             return Ok();
         }
 
         [HttpPut]
         [Authorize]
-        public async Task<ActionResult> UpdateRoleAsync([FromBody] Role role)
+        [Authorize(Roles = "admin")]
+        public async Task<ActionResult> UpdateRoleAsync([FromBody] RoleDto role)
         {
+            await _roleService.UpdateRoleAsync(role);
             return Ok();    
         }
 

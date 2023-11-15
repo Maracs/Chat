@@ -17,7 +17,7 @@ namespace DataAccessLayer.Contracts
 
         Task<EntityEntry<T>> CreateAsync(T entity);
 
-        void UpdateAsync(T entity);
+        void Update(T entity);
 
         void Delete(T entity);
     }
