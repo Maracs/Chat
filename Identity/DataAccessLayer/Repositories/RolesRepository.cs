@@ -1,5 +1,6 @@
 ﻿using DataAccessLayer.Data;
 using DataAccessLayer.Entities;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,5 +16,13 @@ namespace DataAccessLayer.Repositories
         {
 
         }
+
+        public async Task<int> GetRoleIdAsync(string roleName)
+        {
+          var role = await _databaseContext.Roles.FirstOrDefaultAsync(x=>x.Name ==roleName);
+          
+          return role.Id;
+        }
+
     }
 }

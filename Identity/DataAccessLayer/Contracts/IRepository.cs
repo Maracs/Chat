@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore.ChangeTracking;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,7 +15,7 @@ namespace DataAccessLayer.Contracts
 
         Task<List<T>?> GetAllAsync();
 
-        Task CreateAsync(T entity);
+        Task<EntityEntry<T>> CreateAsync(T entity);
 
         void UpdateAsync(T entity);
 

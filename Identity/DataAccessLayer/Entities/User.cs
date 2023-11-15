@@ -16,8 +16,6 @@ namespace DataAccessLayer.Entities
 
         public string Passhash { get; set; }
 
-        public string PasshashSalt { get; set; }
-
         public int RoleId { get; set; }
         public Role Role { get; set; }
 

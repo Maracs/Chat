@@ -21,24 +21,15 @@ namespace PresentationLayer.Controllers
         }
 
         [HttpPost("sign-in")]
-        public async Task<ActionResult<TokenDto>> SignIn([FromBody] LoginDto loginDto)
+        public async Task<ActionResult<TokenDto>> SignInAsync([FromBody] LoginDto loginDto)
         {
-
-            
-            return Ok();
+            return Ok(await _userService.SignInAsync(loginDto));
         }
+
         [HttpPost("sign-up")]
-        public async Task<ActionResult<TokenDto>> SignUp([FromBody] SignupDto signupDto)
+        public async Task<ActionResult<TokenDto>> SignUpAsync([FromBody] SignupDto signupDto)
         {
-           
-            return Ok();
-        }
-
-        [HttpPost("register")]
-        [Authorize]
-        public async Task<ActionResult<UserDto>> Register([FromBody] RegisterDto registerDto)
-        {
-            return Ok();
+            return Ok(await _userService.SignUpAsync(signupDto));
         }
     }
 }

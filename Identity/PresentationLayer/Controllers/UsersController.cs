@@ -41,11 +41,11 @@ namespace PresentationLayer.Controllers
         }
 
         [HttpGet("profile")]
-        [Authorize(Roles ="User")]
+        [Authorize]
         public async Task<ActionResult<FullUserInfoDto>> GetProfileAsync()
         {
-            var id = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
-            return Ok(id);
+            
+            return Ok();
         }
 
         [HttpPut("profile")]

@@ -1,6 +1,7 @@
 ﻿using DataAccessLayer.Contracts;
 using DataAccessLayer.Data;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,9 +20,9 @@ namespace DataAccessLayer.Repositories
             _databaseContext = databaseContext;
         }
 
-        public async Task CreateAsync(T entity)
+        public async Task<EntityEntry<T>> CreateAsync(T entity)
         {
-           await _databaseContext.AddAsync(entity);
+           return await _databaseContext.AddAsync(entity);
         }
 
         public void Delete(T entity)
