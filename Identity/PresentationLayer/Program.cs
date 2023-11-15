@@ -23,6 +23,8 @@ namespace PresentationLayer
                 options.LogTo(Console.WriteLine);
             });
 
+            builder.Services.AddAutoMapper(typeof(AutoMapperProfile).Assembly);
+
 
             builder.Services.AddScoped<BlockingsRepository>();
             builder.Services.AddScoped<FriendsRepository>();

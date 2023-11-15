@@ -1,8 +1,10 @@
 ﻿using BusinessLayer.DTOs;
+using BusinessLayer.Extentions;
 using BusinessLayer.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace PresentationLayer.Controllers
 {
@@ -23,13 +25,16 @@ namespace PresentationLayer.Controllers
         [Authorize]
         public async Task<ActionResult<List<FullUserInfoDto>>> GetFriendsAsync()
         {
-            return Ok();
+            var userId = User.GetUserId();
+            return Ok(await _friendsService.GetFriendsAsync(userId));
         }
 
         [HttpPost]
         [Authorize]
         public async Task<ActionResult> AddFriendAsync([FromBody] int fid)
         {
+            var userId = User.GetUserId();
+            await _friendsService.AddFriendAsync(userId, fid);
             return Ok();
         }
 
@@ -37,14 +42,16 @@ namespace PresentationLayer.Controllers
         [Authorize]
         public async Task<ActionResult> DeleteFriendAsync([FromBody] int fid)
         {
+            var userId = User.GetUserId();
+            await _friendsService.DeleteFriendAsync(userId, fid);
             return Ok();
         }
 
         [HttpGet("{id}")]
-        [Authorize]
-        public async Task<ActionResult<List<FullUserInfoDto>>> GetUserFriendsAsync([FromRoute] int userId)
+        [Authorize(Roles ="admin")]
+        public async Task<ActionResult<List<FullUserInfoDto>>> GetUserFriendsAsync([FromRoute] int id)
         {
-            return Ok();
+            return Ok(await _friendsService.GetFriendsAsync(id));
         }
 
     }
