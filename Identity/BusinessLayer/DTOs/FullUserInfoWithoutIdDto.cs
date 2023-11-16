@@ -14,6 +14,5 @@ namespace BusinessLayer.DTOs
         public string? UserLastName { get; set; }
         public string? UserPhone { get; set; }
         public string? UserFirstName { get; set; }
-        public string? Role { get; set; }
     }
 }

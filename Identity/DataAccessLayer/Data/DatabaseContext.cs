@@ -49,7 +49,9 @@ namespace DataAccessLayer.Data
             .HasOne(f => f.User)
             .WithMany()
             .HasForeignKey(f => f.UserId)
-            .OnDelete(DeleteBehavior.NoAction);
+            .OnDelete(DeleteBehavior.Cascade);
+
+
 
 
            

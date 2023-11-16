@@ -24,12 +24,28 @@ namespace BusinessLayer.Extentions
                 .ForMember(dest => dest.AccountName, opt => opt.MapFrom(src => src.UserFriend.AccountName))
                 .ForMember(dest => dest.UserInfo, opt => opt.MapFrom(src => src.UserFriend.UserInfo.Info));
 
+            CreateMap<User, FullUserInfoDto>()
+                .ForMember(dest => dest.UserFirstName, opt => opt.MapFrom(src => src.UserInfo.FirstName))
+                .ForMember(dest => dest.UserLastName, opt => opt.MapFrom(src => src.UserInfo.LastName))
+                .ForMember(dest => dest.UserNickName, opt => opt.MapFrom(src => src.UserInfo.Nickname))
+                .ForMember(dest => dest.UserId, opt => opt.MapFrom(src => src.Id))
+                .ForMember(dest => dest.Role, opt => opt.MapFrom(src => src.Role.Name))
+                .ForMember(dest => dest.UserPhone, opt => opt.MapFrom(src => src.UserInfo.Phone))
+                .ForMember(dest => dest.AccountName, opt => opt.MapFrom(src => src.AccountName))
+                .ForMember(dest => dest.UserInfo, opt => opt.MapFrom(src => src.UserInfo.Info));
+
             CreateMap<Blocked, BlockingDto>()
                 .ForMember(dest => dest.UserId, opt => opt.MapFrom(src => src.BlockedUserId))
                 .ForMember(dest => dest.UserInfo, opt => opt.MapFrom(src => src.BlockedUser.UserInfo.Info))
                 .ForMember(dest => dest.AccountName, opt => opt.MapFrom(src => src.BlockedUser.AccountName))
                 .ForMember(dest => dest.UserNickName, opt => opt.MapFrom(src => src.BlockedUser.UserInfo.Nickname));
 
+            CreateMap<User, UserDto>()
+                .ForMember(dest => dest.UserId, opt => opt.MapFrom(src => src.Id))
+                .ForMember(dest => dest.Nickname, opt => opt.MapFrom(src => src.UserInfo.Nickname))
+                .ForMember(dest => dest.PhoneNumber, opt => opt.MapFrom(src => src.UserInfo.Phone))
+                .ForMember(dest => dest.AccountName, opt => opt.MapFrom(src => src.AccountName))
+                .ForMember(dest => dest.Role, opt => opt.MapFrom(src => src.Role.Name));
         }
     }
 }

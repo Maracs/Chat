@@ -2,6 +2,7 @@ using BusinessLayer.Extentions;
 using BusinessLayer.Services;
 using DataAccessLayer.Data;
 using DataAccessLayer.Repositories;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 
@@ -25,7 +26,7 @@ namespace PresentationLayer
 
             builder.Services.AddAutoMapper(typeof(AutoMapperProfile).Assembly);
 
-
+          
             builder.Services.AddScoped<BlockingsRepository>();
             builder.Services.AddScoped<FriendsRepository>();
             builder.Services.AddScoped<RolesRepository>();
