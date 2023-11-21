@@ -1,13 +1,7 @@
-﻿using DataAccessLayer.Contracts;
-using DataAccessLayer.Data;
+﻿using DataAccessLayer.Data;
 using DataAccessLayer.Entities;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DataAccessLayer.Repositories
 {
@@ -22,14 +16,24 @@ namespace DataAccessLayer.Repositories
         public async Task<User> GetByAccountnameAsync(string? accountName)
         {
             var user = await _databaseContext.Users.FirstOrDefaultAsync(x => x.AccountName == accountName);
-            if (user == null) { throw new NullReferenceException(); }
+
+            if (user == null) 
+            { 
+                throw new NullReferenceException();
+            }
+
             return user;
         }
 
         public async Task<string> GetUserRoleAsync(User user)
         {
             var role = await _databaseContext.Roles.FindAsync(user.RoleId);
-            if (role == null) { throw new NullReferenceException(); }
+
+            if (role == null) 
+            { 
+                throw new NullReferenceException(); 
+            }
+
             return role.Name;
         }
 
@@ -49,6 +53,7 @@ namespace DataAccessLayer.Repositories
                 .Include(u=>u.UserInfo)
                 .Include(u=>u.Role)
                 .Where(u=>u.Id==id)
+                .AsNoTracking()
                 .FirstAsync();
         }
 
@@ -56,14 +61,19 @@ namespace DataAccessLayer.Repositories
         {
             return await _databaseContext.UserStatuses
                 .Include(u=>u.Status)
-                .Where(u=>u.UserId == id).ToListAsync();
+                .Where(u=>u.UserId == id)
+                .AsNoTracking()
+                .ToListAsync();
         }
 
-        public async Task<List<User>> GetAllUsersAsync()
+        public async Task<List<User>> GetAllUsersAsync(int offset, int limit)
         {
             return await _databaseContext.Users
                 .Include(u=>u.UserInfo)
                 .Include(u=>u.Role)
+                .Skip(offset)
+                .Take(limit)
+                .AsNoTracking()
                 .ToListAsync();
         }
 
@@ -73,6 +83,7 @@ namespace DataAccessLayer.Repositories
              .Include(u => u.UserInfo)
              .Include(u => u.Role)
              .Where(u=>u.Id==id)
+             .AsNoTracking()
              .FirstAsync();
         }
 
@@ -85,7 +96,9 @@ namespace DataAccessLayer.Repositories
         {
             return await _databaseContext.UserImages
                .Include(u => u.Image)
-               .Where(u => u.UserId == id).ToListAsync();
+               .Where(u => u.UserId == id)
+               .AsNoTracking()
+               .ToListAsync();
         }
 
         public async Task AddPhotosAsync(int id, List<string> photosSrc)
@@ -100,14 +113,14 @@ namespace DataAccessLayer.Repositories
             await _databaseContext.SaveChangesAsync();
         }
 
-        public async Task DeletePhotoAsync(int userId, int photoId)
+        public void DeletePhoto(int userId, int photoId)
         {
             _databaseContext.Remove(new UserImage() {UserId = userId,ImageId = photoId });
             _databaseContext.SaveChanges();
-            var image = await _databaseContext.Images.FindAsync(photoId);
+            var image = _databaseContext.Images.Find(photoId);
             _databaseContext.Remove(image);
 
-            await _databaseContext.SaveChangesAsync();  
+           _databaseContext.SaveChanges();  
         }
 
         public async Task DeleteUserAsync(int id)
@@ -116,27 +129,42 @@ namespace DataAccessLayer.Repositories
             var userImages = await _databaseContext.UserImages.Include(u=>u.Image).Where(u => u.UserId == id).ToListAsync();
 
             foreach (var userImage in userImages)
+            {
                 _databaseContext.Remove(userImage.Image);
+            }
+               
 
             var userStatuses = await _databaseContext.UserStatuses.Where(u => u.UserId == id).ToListAsync();
 
             foreach (var status in userStatuses)
-                 _databaseContext.Remove(status);
+            {
+                _databaseContext.Remove(status);
+            }
+                
 
             var userInfos = await _databaseContext.UserInfos.Where(u => u.UserId == id).ToListAsync();
 
             foreach (var info in userInfos)
+            {
                 _databaseContext.Remove(info);
+            }
+                
 
             var userFriends = await _databaseContext.Friends.Where(u => u.UserId == id || u.UserFriendId == id).ToListAsync();
 
             foreach (var friend in userFriends)
+            {
                 _databaseContext.Remove(friend);
+            }
+                
 
             var userBlockings = await _databaseContext.Blockeds.Where(u => u.UserId == id || u.BlockedUserId == id).ToListAsync();
 
             foreach (var blocking in userBlockings)
+            {
                 _databaseContext.Remove(blocking);
+            }
+                
 
             var user = await GetByIdAsync(id);
 

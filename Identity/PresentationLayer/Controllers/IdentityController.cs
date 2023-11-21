@@ -1,11 +1,7 @@
 ﻿using BusinessLayer.DTOs;
-using BusinessLayer.Services;
-using DataAccessLayer.Entities;
-using DataAccessLayer.Repositories;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
+using BusinessLayer.Interfaces;
 using Microsoft.AspNetCore.Mvc;
-using System.Security.Claims;
+
 
 namespace PresentationLayer.Controllers
 {
@@ -13,9 +9,9 @@ namespace PresentationLayer.Controllers
     [ApiController]
     public class IdentityController : ControllerBase
     {
-        private readonly UsersService _userService;
+        private readonly IUsersService _userService;
 
-        public IdentityController(UsersService userService)
+        public IdentityController(IUsersService userService)
         {
             _userService = userService;
         }

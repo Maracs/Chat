@@ -1,12 +1,11 @@
 ﻿using BusinessLayer.DTOs;
 using BusinessLayer.Extentions;
-using BusinessLayer.Services;
+using BusinessLayer.Interfaces;
+using DataAccessLayer.Constants;
 using DataAccessLayer.Entities;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System.Security.Claims;
-using System.Security.Cryptography;
+
 
 namespace PresentationLayer.Controllers
 {
@@ -14,9 +13,9 @@ namespace PresentationLayer.Controllers
     [ApiController]
     public class UsersController : ControllerBase
     {
-        private readonly UsersService _userService;
+        private readonly IUsersService _userService;
 
-        public UsersController(UsersService userService)
+        public UsersController(IUsersService userService)
         {
             _userService = userService;
         }
@@ -37,27 +36,29 @@ namespace PresentationLayer.Controllers
 
         [HttpPost("statuses")]
         [Authorize]
-        public async Task<ActionResult> AddUserStatusAsync([FromBody] int sid)
+        public async Task<ActionResult> AddUserStatusAsync([FromBody] int statusId)
         {
             var id = User.GetUserId();
-            await _userService.AddUserStatusAsync(id, sid);
+            await _userService.AddUserStatusAsync(id, statusId);
+
             return Ok();
         }
 
         [HttpDelete("statuses")]
         [Authorize]
-        public async Task<ActionResult> DeleteUserStatusAsync([FromBody] int sid)
+        public async Task<ActionResult> DeleteUserStatusAsync([FromBody] int statusId)
         {
             var id = User.GetUserId();
-            await _userService.DeleteUserStatusAsync(id, sid);
+            await _userService.DeleteUserStatusAsync(id, statusId);
+
             return Ok();
         }
 
         [HttpGet]
-        [Authorize(Roles ="admin")]
-        public async Task<ActionResult<List<FullUserInfoDto>>> GetAllUsersAsync()
+        [Authorize(Roles = RoleConstants.Admin)]
+        public async Task<ActionResult<List<FullUserInfoDto>>> GetAllUsersAsync([FromQuery] int offset = 0,[FromQuery] int limit = 100)
         {
-            return Ok(await _userService.GetAllUsersAsync());
+            return Ok(await _userService.GetAllUsersAsync(offset,limit));
         }
 
         [HttpGet("profile")]
@@ -65,6 +66,7 @@ namespace PresentationLayer.Controllers
         public async Task<ActionResult<FullUserInfoDto>> GetProfileAsync()
         {
             var id = User.GetUserId();
+
             return Ok(await _userService.GetProfileAsync(id));
         }
 
@@ -74,11 +76,12 @@ namespace PresentationLayer.Controllers
         {
             var id = User.GetUserId();
             await _userService.UpdateProfileAsync(id, userDto);
+
             return Ok();
         }
 
         [HttpPut("{id}")]
-        [Authorize(Roles ="admin")]
+        [Authorize(Roles = RoleConstants.Admin)]
         public async Task<ActionResult<FullUserInfoDto>> UpdateUserAsync([FromRoute] int id, [FromBody] FullUserInfoWithoutIdDto userDto)
         {
             await _userService.UpdateProfileAsync(id, userDto);
@@ -88,7 +91,7 @@ namespace PresentationLayer.Controllers
 
         [HttpGet("{id}/photos")]
         [Authorize]
-        public async Task<ActionResult<List<Image>>> GetPhotosAsync([FromRoute] int id)
+        public async Task<ActionResult<List<ImageDto>>> GetPhotosAsync([FromRoute] int id)
         {
            
             return Ok(await _userService.GetPhotosAsync(id));
@@ -98,8 +101,9 @@ namespace PresentationLayer.Controllers
         [Authorize]
         public async Task<ActionResult> DeleteUserAsync([FromRoute] int id)
         {
-            if (User.GetUserId() == id || User.IsInRole("admin"))
+            if (User.GetUserId() == id || User.IsInRole(RoleConstants.Admin))
                 await _userService.DeleteUserAsync(id);
+
             return Ok();
         }
 
@@ -109,6 +113,7 @@ namespace PresentationLayer.Controllers
         {
             var userId = User.GetUserId();
             await _userService.AddPhotosAsync(userId,photosSrc);
+
             return Ok();
         }
 
@@ -118,6 +123,7 @@ namespace PresentationLayer.Controllers
         {
             var userId = User.GetUserId();
             await _userService.DeletePhotosAsync(userId, photos);
+
             return Ok();
         }
 

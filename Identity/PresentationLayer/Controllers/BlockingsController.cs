@@ -1,8 +1,8 @@
 ﻿using BusinessLayer.DTOs;
 using BusinessLayer.Extentions;
-using BusinessLayer.Services;
+using BusinessLayer.Interfaces;
+using DataAccessLayer.Constants;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace PresentationLayer.Controllers
@@ -13,44 +13,47 @@ namespace PresentationLayer.Controllers
     public class BlockingsController : ControllerBase
     {
 
-        private readonly BlockingsService _blockingsService;
+        private readonly IBlockingsService _blockingsService;
 
-        public BlockingsController(BlockingsService blockingsService)
+        public BlockingsController(IBlockingsService blockingsService)
         {
             _blockingsService = blockingsService;
         }
 
         [HttpGet]
         [Authorize]
-        public async Task<ActionResult<List<BlockingDto>>> GetBlockingsAsync()
+        public async Task<ActionResult<List<BlockingDto>>> GetBlockingsAsync([FromQuery] int offset = 0, [FromQuery] int limit = 100)
         {
             var userId = User.GetUserId();
-            return Ok(await _blockingsService.GetBlockingsAsync(userId));
+
+            return Ok(await _blockingsService.GetBlockingsAsync(userId, offset, limit));
         }
 
-        [HttpPost]
+        [HttpPost("{id}")]
         [Authorize]
-        public async Task<ActionResult> AddBlockingAsync([FromBody] int bid)
+        public async Task<ActionResult> AddBlockingAsync([FromRoute] int bid)
         {
             var userId = User.GetUserId();
             await _blockingsService.AddBlockingAsync(userId, bid);
+
             return Ok();
         }
 
-        [HttpDelete]
+        [HttpDelete("{id}")]
         [Authorize]
-        public async Task<ActionResult> DeleteBlockingAsync([FromBody] int bid)
+        public async Task<ActionResult> DeleteBlockingAsync([FromRoute] int bid)
         {
             var userId = User.GetUserId();
             await _blockingsService.DeleteBlockingAsync(userId, bid);
+
             return Ok();
         }
 
         [HttpGet("{id}")]
-        [Authorize(Roles ="admin")]
-        public async Task<ActionResult<List<BlockingDto>>> GetUserBlockingsAsync([FromRoute] int id)
+        [Authorize(Roles = RoleConstants.Admin)]
+        public async Task<ActionResult<List<BlockingDto>>> GetUserBlockingsAsync([FromRoute] int id, [FromQuery] int offset = 0, [FromQuery] int limit = 100)
         {
-            return Ok(await _blockingsService.GetBlockingsAsync(id));
+            return Ok(await _blockingsService.GetBlockingsAsync(id,offset,limit));
         }
     }
 }

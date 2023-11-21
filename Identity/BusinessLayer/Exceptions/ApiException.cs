@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace BusinessLayer.Exeptions
+﻿namespace BusinessLayer.Exceptions
 {
     public class ApiException:Exception
     {
@@ -25,9 +19,5 @@ namespace BusinessLayer.Exeptions
         }
 
         public ApiException(string message, System.Exception inner) : base(message, inner) { }
-
-        protected ApiException(
-            System.Runtime.Serialization.SerializationInfo info,
-            System.Runtime.Serialization.StreamingContext context) : base(info, context) { }
     }
 }

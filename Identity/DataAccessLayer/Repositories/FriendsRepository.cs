@@ -1,11 +1,7 @@
 ﻿using DataAccessLayer.Data;
 using DataAccessLayer.Entities;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace DataAccessLayer.Repositories
 {
@@ -22,13 +18,16 @@ namespace DataAccessLayer.Repositories
             return _databaseContext.Friends.AnyAsync(f => f.UserId == userId && f.UserFriendId == friendId);
         }
 
-        public async Task<List<Friend>> GetFriendsAsync(int id)
+        public async Task<List<Friend>> GetFriendsAsync(int id,int offset,int limit)
         {
             return await _databaseContext.Friends.Include(f=>f.UserFriend)
                     .ThenInclude(u=>u.UserInfo)
                 .Include(f=>f.UserFriend)
                     .ThenInclude(u=>u.Role)
                 .Where(f => f.UserId == id)
+                .Skip(offset)
+                .Take(limit)
+                .AsNoTracking()
                 .ToListAsync();
         }
     }

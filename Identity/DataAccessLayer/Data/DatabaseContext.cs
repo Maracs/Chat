@@ -1,10 +1,7 @@
-﻿using DataAccessLayer.Entities;
+﻿using DataAccessLayer.DataConfigurations;
+using DataAccessLayer.Entities;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace DataAccessLayer.Data
 {
@@ -33,36 +30,13 @@ namespace DataAccessLayer.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Blocked>()
-            .HasKey(blocked => new {blocked.UserId,blocked.BlockedUserId});
+            new BlockedEntityTypeConfiguration().Configure(modelBuilder.Entity<Blocked>());
 
-            modelBuilder.Entity<Blocked>()
-            .HasOne(b => b.BlockedUser)
-            .WithMany()
-            .HasForeignKey(b => b.BlockedUserId)
-            .OnDelete(DeleteBehavior.NoAction);
+            new FriendEntityTypeConfiguration().Configure(modelBuilder.Entity<Friend>());
 
-            modelBuilder.Entity<Friend>()
-            .HasKey(friend => new {friend.UserId,friend.UserFriendId});
+            new UserImageEntityTypeConfiguration().Configure(modelBuilder.Entity<UserImage>());
 
-            modelBuilder.Entity<Friend>()
-            .HasOne(f => f.User)
-            .WithMany()
-            .HasForeignKey(f => f.UserId)
-            .OnDelete(DeleteBehavior.Cascade);
-
-
-
-
-           
-
-            modelBuilder.Entity<UserImage>()
-            .HasKey(userImage => new { userImage.UserId, userImage.ImageId });
-
-            modelBuilder.Entity<UserStatus>()
-           .HasKey(userStatus => new { userStatus.UserId, userStatus.StatusId});
-
-
+            new UserStatusEntityTypeConfiguration().Configure(modelBuilder.Entity<UserStatus>());
         }
 
     }

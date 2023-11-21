@@ -1,16 +1,13 @@
 ﻿using AutoMapper;
 using BusinessLayer.DTOs;
+using BusinessLayer.Interfaces;
 using DataAccessLayer.Entities;
 using DataAccessLayer.Repositories;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace BusinessLayer.Services
 {
-    public class FriendsService
+    public class FriendsService: IFriendsService
     {
         private readonly FriendsRepository _friendsRepository;
         private readonly BlockingsRepository _blockingsRepository;
@@ -31,9 +28,7 @@ namespace BusinessLayer.Services
 
                 await _friendsRepository.CreateAsync(new Friend() { UserId = userId, UserFriendId = fid });
                 await _friendsRepository.SaveChangesAsync();
-
-            }
-           
+            }      
         }
 
         public async Task DeleteFriendAsync(int userId, int fid)
@@ -43,9 +38,9 @@ namespace BusinessLayer.Services
             await _friendsRepository.SaveChangesAsync();
         }
 
-        public async Task<List<FullUserInfoDto>> GetFriendsAsync(int id)
+        public async Task<List<FullUserInfoDto>> GetFriendsAsync(int id,int offset,int limit)
         {
-            var users = await _friendsRepository.GetFriendsAsync(id);
+            var users = await _friendsRepository.GetFriendsAsync(id,offset,limit);
        
            return _mapper.Map<List<FullUserInfoDto>>(users);
         }

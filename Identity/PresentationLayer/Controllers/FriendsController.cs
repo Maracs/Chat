@@ -1,10 +1,10 @@
 ﻿using BusinessLayer.DTOs;
 using BusinessLayer.Extentions;
-using BusinessLayer.Services;
+using BusinessLayer.Interfaces;
+using DataAccessLayer.Constants;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System.Security.Claims;
+
 
 namespace PresentationLayer.Controllers
 {
@@ -14,44 +14,47 @@ namespace PresentationLayer.Controllers
     public class FriendsController : ControllerBase
     {
 
-        private readonly FriendsService _friendsService;
+        private readonly IFriendsService _friendsService;
 
-        public FriendsController(FriendsService friendsService)
+        public FriendsController(IFriendsService friendsService)
         {
             _friendsService = friendsService;
         }
 
         [HttpGet]
         [Authorize]
-        public async Task<ActionResult<List<FullUserInfoDto>>> GetFriendsAsync()
+        public async Task<ActionResult<List<FullUserInfoDto>>> GetFriendsAsync([FromQuery] int offset = 0, [FromQuery] int limit = 100)
         {
             var userId = User.GetUserId();
-            return Ok(await _friendsService.GetFriendsAsync(userId));
+
+            return Ok(await _friendsService.GetFriendsAsync(userId,offset,limit));
         }
 
-        [HttpPost]
+        [HttpPost("{id}")]
         [Authorize]
-        public async Task<ActionResult> AddFriendAsync([FromBody] int fid)
+        public async Task<ActionResult> AddFriendAsync([FromRoute] int fid)
         {
             var userId = User.GetUserId();
             await _friendsService.AddFriendAsync(userId, fid);
+
             return Ok();
         }
 
-        [HttpDelete]
+        [HttpDelete("{id}")]
         [Authorize]
-        public async Task<ActionResult> DeleteFriendAsync([FromBody] int fid)
+        public async Task<ActionResult> DeleteFriendAsync([FromRoute] int fid)
         {
             var userId = User.GetUserId();
             await _friendsService.DeleteFriendAsync(userId, fid);
+
             return Ok();
         }
 
         [HttpGet("{id}")]
-        [Authorize(Roles ="admin")]
-        public async Task<ActionResult<List<FullUserInfoDto>>> GetUserFriendsAsync([FromRoute] int id)
+        [Authorize(Roles = RoleConstants.Admin)]
+        public async Task<ActionResult<List<FullUserInfoDto>>> GetUserFriendsAsync([FromRoute] int id, [FromQuery] int offset = 0, [FromQuery] int limit = 100)
         {
-            return Ok(await _friendsService.GetFriendsAsync(id));
+            return Ok(await _friendsService.GetFriendsAsync(id, offset, limit));
         }
 
     }

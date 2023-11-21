@@ -2,11 +2,7 @@
 using DataAccessLayer.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace DataAccessLayer.Repositories
 {
@@ -30,9 +26,14 @@ namespace DataAccessLayer.Repositories
             _databaseContext.Remove(entity);
         }
 
-        public async Task<List<T>?> GetAllAsync()
+        public async Task<List<T>?> GetAllAsync(int offset, int limit)
         {
-            var entities =await  _databaseContext.Set<T>().ToListAsync();
+            var entities =await  _databaseContext.Set<T>()
+                .Skip(offset)
+                .Take(limit)
+                .AsNoTracking()
+                .ToListAsync();
+
             return entities;
         }
 

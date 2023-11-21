@@ -1,15 +1,12 @@
 ﻿using BusinessLayer.DTOs;
+using BusinessLayer.Interfaces;
 using DataAccessLayer.Entities;
 using DataAccessLayer.Repositories;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace BusinessLayer.Services
 {
-    public class RolesService
+    public class RolesService:IRolesService
     {
         private readonly RolesRepository _rolesRepository;
 
@@ -24,16 +21,16 @@ namespace BusinessLayer.Services
             await _rolesRepository.SaveChangesAsync();
         }
 
-        public Task<List<Role>> GetRolesAsync()
+        public async Task<List<Role>> GetRolesAsync(int offset, int limit)
         {
-            return _rolesRepository.GetAllAsync();
+            return await _rolesRepository.GetAllAsync(offset,limit);
         }
 
-        public async Task UpdateRoleAsync(RoleDto role)
+        public async Task UpdateRoleAsync(RoleDto roleDto)
         {
-           var databaseRole = await _rolesRepository.GetByIdAsync(role.Id);
-            databaseRole.Name = role.Name;
-            _rolesRepository.Update(databaseRole);
+            var role = await _rolesRepository.GetByIdAsync(roleDto.Id);
+            role.Name = roleDto.Name;
+            _rolesRepository.Update(role);
             await _rolesRepository.SaveChangesAsync();
         }
     }

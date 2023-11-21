@@ -1,22 +1,16 @@
-﻿using BusinessLayer.Extentions;
+﻿using BusinessLayer.Interfaces;
 using DataAccessLayer.Entities;
 using DataAccessLayer.Repositories;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
-using System;
-using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
 using System.Security.Claims;
 using System.Text;
-using System.Threading.Tasks;
 using AuthenticationOptions = BusinessLayer.Extentions.AuthenticationOptions;
 
 namespace BusinessLayer.Services
 {
-    public class TokensService
+    public class TokensService: ITokensService
     {
         private readonly UsersRepository _userRepository;
 
@@ -31,10 +25,9 @@ namespace BusinessLayer.Services
         private async Task<List<Claim>> GetClaimsAsync(User user)
         {
             var claims = new List<Claim>
-        {
-            new Claim(JwtRegisteredClaimNames.NameId, user.Id.ToString())
-        };
-
+            {
+                new Claim(JwtRegisteredClaimNames.NameId, user.Id.ToString())
+            };
             var role = await _userRepository.GetUserRoleAsync(user);
             claims.Add(new Claim(ClaimTypes.Role, role));
 
@@ -57,15 +50,10 @@ namespace BusinessLayer.Services
         public async Task<string> GetTokenAsync(User user)
         {
             var claims = await GetClaimsAsync(user);
-
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_authOptions.Value.Key));
-
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
-
             var tokenDescriptor = GetTokenDescriptor(claims, creds);
-
             var tokenHandler = new JwtSecurityTokenHandler();
-
             var token = tokenHandler.CreateToken(tokenDescriptor);
 
             return tokenHandler.WriteToken(token);

@@ -1,27 +1,28 @@
-﻿using BusinessLayer.DTOs;
+﻿using AutoMapper;
+using BusinessLayer.DTOs;
+using BusinessLayer.Interfaces;
 using DataAccessLayer.Entities;
 using DataAccessLayer.Repositories;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace BusinessLayer.Services
 {
-    public class StatusesService
+    public class StatusesService: IStatusesService
     {
         private readonly StatusesRepository _statusesRepository;
 
-        public StatusesService(StatusesRepository statusesRepository)
+        private readonly IMapper _mapper;
+
+        public StatusesService(StatusesRepository statusesRepository,IMapper mapper)
         {
             _statusesRepository = statusesRepository;
+            _mapper = mapper;
         }
 
 
-        public async Task<List<Status>> GetStatusesAsync()
+        public async Task<List<StatusDto>> GetStatusesAsync(int limit,int offset)
         {
-            return await _statusesRepository.GetAllAsync();
+            return _mapper.Map<List<StatusDto>>(await _statusesRepository.GetAllAsync(limit,offset));
         }
 
         public async Task AddStatusAsync(string status)
@@ -34,7 +35,6 @@ namespace BusinessLayer.Services
         {
             var databaseStatus = await _statusesRepository.GetByIdAsync(status.Id);
             databaseStatus.Name = status.Name;
-
             _statusesRepository.Update(databaseStatus);
             await _statusesRepository.SaveChangesAsync();
         }

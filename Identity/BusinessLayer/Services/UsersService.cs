@@ -1,29 +1,23 @@
 ﻿using AutoMapper;
-using Azure.Core;
 using BusinessLayer.DTOs;
-using BusinessLayer.Exeptions;
+using BusinessLayer.Exceptions;
+using BusinessLayer.Interfaces;
 using DataAccessLayer.Entities;
 using DataAccessLayer.Repositories;
-using Microsoft.AspNetCore.Identity;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Cryptography;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace BusinessLayer.Services
 {
-    public class UsersService
+    public class UsersService: IUsersService
     {
         private readonly UsersRepository _userRepository;
         private readonly RolesRepository _rolesRepository;
-        private readonly TokensService _tokenService;
+        private readonly ITokensService _tokenService;
 
         private readonly IMapper _mapper;
 
 
-        public UsersService(UsersRepository userRepository, TokensService tokenService,
+        public UsersService(UsersRepository userRepository, ITokensService tokenService,
             RolesRepository rolesRepository,IMapper mapper)
         {
             _userRepository = userRepository;
@@ -74,10 +68,16 @@ namespace BusinessLayer.Services
             var user = await _userRepository.GetByAccountnameAsync(loginDto.AccountName);
 
             if (user == null)
+            {
                 throw new ApiException("Account dont exists", ApiException.ExceptionStatus.NotFound);
+            }
+               
 
             if (loginDto.Passhash != user.Passhash)
-                throw new ApiException( "Invalid password or account name",ApiException.ExceptionStatus.Unauthorized);
+            {
+                throw new ApiException("Invalid password or account name", ApiException.ExceptionStatus.Unauthorized);
+            }
+                
 
             return new TokenDto()
             {
@@ -94,20 +94,21 @@ namespace BusinessLayer.Services
         }
 
 
-        public async Task<List<Status>> GetUserStatusesAsync(int id)
+        public async Task<List<StatusDto>> GetUserStatusesAsync(int id)
         {
            var userStatuses = await _userRepository.GetUserStatusesAsync(id);
 
-            var statuses = new List<Status>();
-            foreach (var userStatus in userStatuses)
-                statuses.Add(userStatus.Status);
+            var statuses = userStatuses
+                .Select(status => _mapper.Map<StatusDto>(status.Status))
+                .ToList();
+
             return statuses;
         }
 
 
-        public async Task<List<FullUserInfoDto>> GetAllUsersAsync()
+        public async Task<List<FullUserInfoDto>> GetAllUsersAsync(int offset, int limit)
         {
-            var users = await _userRepository.GetAllUsersAsync();
+            var users = await _userRepository.GetAllUsersAsync(offset,limit);
             
             return _mapper.Map<List<FullUserInfoDto>>(users);
         }
@@ -126,11 +127,10 @@ namespace BusinessLayer.Services
             var user = await _userRepository.GetProfileAsync(id);
 
             user.AccountName = userDto.AccountName;
-            user.UserInfo.Nickname = userDto.UserNickName;
-            user.UserInfo.Info = userDto.UserInfo;
-            user.UserInfo.LastName = userDto.UserLastName;
-            user.UserInfo.Phone = userDto.UserPhone;
-            user.UserInfo.FirstName = userDto.UserFirstName;
+
+            var userInfoId = user.UserInfo.Id;
+            user.UserInfo = _mapper.Map<UserInfo>(userDto);
+            user.UserInfo.Id = userInfoId;
 
             _userRepository.Update(user);
 
@@ -142,7 +142,6 @@ namespace BusinessLayer.Services
 
         public async Task DeleteUserAsync(int id)
         {
-            
             await _userRepository.DeleteUserAsync(id);
         }
 
@@ -158,16 +157,14 @@ namespace BusinessLayer.Services
             _userRepository.Update(user);
 
             await _userRepository.SaveChangesAsync();
-
         }
 
-        public async Task<List<Image>> GetPhotosAsync(int id)
+        public async Task<List<ImageDto>> GetPhotosAsync(int id)
         {
             var userPhotos = await _userRepository.GetUserPhotosAsync(id);
 
-            var photoes = new List<Image>();
-            foreach (var userPhoto in userPhotos)
-                photoes.Add(new Image() {Id = userPhoto.ImageId,Src = userPhoto.Image.Src });
+            var photoes = userPhotos.Select(photo=>_mapper.Map<ImageDto>(photo.Image)).ToList();
+
             return photoes;
         }
 
@@ -178,20 +175,17 @@ namespace BusinessLayer.Services
 
         public async Task DeletePhotosAsync(int userId, List<int> photosId)
         {
-
-            foreach (var photoId in photosId)
-                await  _userRepository.DeletePhotoAsync(userId,photoId);
-            
+             photosId.ForEach( photoId => _userRepository.DeletePhoto(userId, photoId));
         }
 
-        public async Task AddUserStatusAsync(int id, int sid)
+        public async Task AddUserStatusAsync(int id, int statusId)
         {
-            await _userRepository.AddUserStatusAsync(id,sid);
+            await _userRepository.AddUserStatusAsync(id, statusId);
         }
 
-        public async Task DeleteUserStatusAsync(int id, int sid)
+        public async Task DeleteUserStatusAsync(int id, int statusId)
         {
-            await _userRepository.DeleteUserStatusAsync( id,  sid);
+            await _userRepository.DeleteUserStatusAsync( id, statusId);
         }
     }
 }
