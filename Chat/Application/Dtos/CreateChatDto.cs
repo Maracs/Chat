@@ -1,22 +1,17 @@
-﻿using System;
+﻿using Domain.Entities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Domain.Entities
+namespace Application.Dtos
 {
-    public class Chat
+    public class CreateChatDto
     {
         public int Id { get; set; }
         public string Name { get; set; } = null!;
         public int CreatorId { get; set; }
-        public ChatUser Creator { get; set; } = null!;
-
         public string? Info { get; set; }
-
-        public List<ChatMessage> Messages { get; set; } = null!;
-
-        public List<ChatUser> Users { get; set; } = null!;
     }
 }
