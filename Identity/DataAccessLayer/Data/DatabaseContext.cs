@@ -1,7 +1,6 @@
-﻿using DataAccessLayer.DataConfigurations;
-using DataAccessLayer.Entities;
+﻿using DataAccessLayer.Entities;
 using Microsoft.EntityFrameworkCore;
-
+using System.Reflection;
 
 namespace DataAccessLayer.Data
 {
@@ -30,13 +29,8 @@ namespace DataAccessLayer.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            new BlockedEntityTypeConfiguration().Configure(modelBuilder.Entity<Blocked>());
-
-            new FriendEntityTypeConfiguration().Configure(modelBuilder.Entity<Friend>());
-
-            new UserImageEntityTypeConfiguration().Configure(modelBuilder.Entity<UserImage>());
-
-            new UserStatusEntityTypeConfiguration().Configure(modelBuilder.Entity<UserStatus>());
+            base.OnModelCreating(modelBuilder);
+            modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
         }
 
     }
