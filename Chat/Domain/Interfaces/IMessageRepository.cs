@@ -9,16 +9,16 @@ namespace Domain.Interfaces
 {
     public interface IMessageRepository
     {
-        Task<Chat> ChangeMessageStatusAsync(int chatid, int id, string status);
+        Task ChangeMessageStatusAsync(int chatid, int id, string status);
 
         Task<List<Chat>> GetByIdAsync(int chatid);
 
-        Task SendAsync(Chat chat);
+        Task SendAsync(ChatMessage chatMessage, Message message);
 
-        Task ResendAsync(Chat chat);
+        void DeleteAsync(int chatid, int id);
 
-        Task DeleteAsync(int chatid, int id);
+        void UpdateAsync(Message message);
 
-        Task<Message> UpdateAsync(int chatid, int id, Message message);
+        Task SaveChangesAsync();
     }
 }

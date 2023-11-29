@@ -27,9 +27,9 @@ namespace WebApi.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<ChatDto>>> GetAllAsync()
+        public async Task<ActionResult<List<ChatDto>>> GetAllAsync([FromQuery] int offset = 0, [FromQuery] int limit = 100)
         {
-            return Ok(await _chatService.GetAllAsync(userId));
+            return Ok(await _chatService.GetAllAsync(userId, offset, limit));
         }
 
         [HttpPost]
@@ -47,9 +47,10 @@ namespace WebApi.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult<ChatDto>> UpdateAsync([FromRoute] int id,[FromBody] CreateChatDto chatDto)
+        public async Task<ActionResult> UpdateAsync([FromRoute] int id,[FromBody] CreateChatDto chatDto)
         {
-            return Ok(await _chatService.UpdateAsync(userId,id, chatDto));
+            await _chatService.UpdateAsync(userId, id, chatDto);
+            return Ok();
         }
     }
 }

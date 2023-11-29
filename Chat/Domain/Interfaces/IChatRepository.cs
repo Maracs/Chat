@@ -11,12 +11,14 @@ namespace Domain.Interfaces
     {
         Task<Chat> GetByIdAsync(int id);
 
-        Task<List<Chat>> GetAllAsync(int id);
+        Task<List<Chat>> GetAllAsync(int offset, int limit);
 
         Task CreateAsync(Chat chat);
 
         Task DeleteAsync(int id);
 
-        Task<Chat> UpdateAsync(int id, Chat chat);
+        void UpdateAsync(Chat chat);
+
+        Task SaveChangesAsync();
     }
 }

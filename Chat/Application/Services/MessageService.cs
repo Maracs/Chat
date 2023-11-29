@@ -25,10 +25,7 @@ namespace Application.Services
             throw new NotImplementedException();
         }
 
-        public Task ResendAsync(CreateChatDto chatDto)
-        {
-            throw new NotImplementedException();
-        }
+     
 
         public Task SendAsync(CreateChatDto chatDto)
         {

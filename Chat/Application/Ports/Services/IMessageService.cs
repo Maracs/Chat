@@ -13,12 +13,10 @@ namespace Application.Ports.Services
 
         Task<List<ChatDto>> GetByIdAsync(int chatid);
 
-        Task SendAsync(CreateChatDto chatDto);
-
-        Task ResendAsync(CreateChatDto chatDto);
+        Task SendAsync(MessageDto messageDto);
 
         Task DeleteAsync(int chatid, int id);
 
-        Task<MessageDto> UpdateAsync(int chatid, int id, MessageDto messageDto);
+        Task UpdateAsync(int chatid, int id, MessageDto messageDto);
     }
 }

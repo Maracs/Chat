@@ -28,19 +28,13 @@ namespace WebApi.Controllers
         }
 
         [HttpPost("{chatid}")]
-        public async Task<ActionResult> SendAsync([FromBody] CreateChatDto chatDto)
+        public async Task<ActionResult> SendAsync([FromBody] MessageDto messageDto)
         {
-            await _messageService.SendAsync(chatDto);
+            await _messageService.SendAsync(messageDto);
             return Ok();
         }
 
-        [HttpPost("{chatid}/resending")]
-        public async Task<ActionResult> ResendAsync([FromBody] CreateChatDto chatDto)
-        {
-            await _messageService.ResendAsync(chatDto);
-            return Ok();
-        }
-
+      
         [HttpDelete("{chatid}/{id}")]
         public async Task<ActionResult> DeleteAsync([FromRoute] int chatid, [FromRoute] int id)
         {
@@ -49,9 +43,10 @@ namespace WebApi.Controllers
         }
 
         [HttpPut("{chatid}/{id}")]
-        public async Task<ActionResult<MessageDto>> UpdateAsync([FromRoute] int chatid, [FromRoute] int id, [FromBody] MessageDto messageDto)
+        public async Task<ActionResult> UpdateAsync([FromRoute] int chatid, [FromRoute] int id, [FromBody] MessageDto messageDto)
         {
-            return Ok(await _messageService.UpdateAsync(chatid,id, messageDto));
+            await _messageService.UpdateAsync(chatid, id, messageDto);
+            return Ok();
         }
     }
 }
