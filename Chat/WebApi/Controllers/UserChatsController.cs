@@ -1,13 +1,14 @@
 ﻿using Application.Dtos;
 using Application.Extentions;
 using Application.Ports.Services;
-using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class UserChatsController : ControllerBase
     {
         private readonly IUserChatService _userChatsService;

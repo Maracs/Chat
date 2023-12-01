@@ -70,7 +70,7 @@ namespace WebApi
 
             
 
-           // app.UseExceptionHandlerMiddleware();
+           app.UseExceptionHandlerMiddleware();
 
             app.UseAuthentication();
             app.UseAuthorization();
