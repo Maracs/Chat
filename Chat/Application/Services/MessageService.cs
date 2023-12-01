@@ -1,40 +1,95 @@
 ﻿using Application.Dtos;
+using Application.Exceptions;
 using Application.Ports.Services;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using AutoMapper;
+using Domain.Entities;
+using Domain.Interfaces;
+
 
 namespace Application.Services
 {
     public class MessageService : IMessageService
     {
-        public Task<ChatDto> ChangeMessageStatusAsync(int chatid, int id, string status)
+        private readonly IMessageRepository _messageRepository;
+
+        private readonly IChatRepository _chatRepository;
+
+        private readonly IMapper _mapper;
+
+        public MessageService(IMessageRepository messageRepository, IChatRepository chatRepository, IMapper mapper)
         {
-            throw new NotImplementedException();
+            _messageRepository = messageRepository;
+            _chatRepository = chatRepository;
+            _mapper = mapper;
         }
 
-        public Task DeleteAsync(int chatid, int id)
+
+        public async Task ChangeMessageStatusAsync(int userId, int chatid, int id, string status)
         {
-            throw new NotImplementedException();
+            if(userId!=id)
+            {
+                throw new ApiException("Invalid operation", ApiException.ExceptionStatus.BadRequest);
+            }
+            await _messageRepository.ChangeMessageStatusAsync(chatid,id,status);
+            await _messageRepository.SaveChangesAsync();
         }
 
-        public Task<List<ChatDto>> GetByIdAsync(int chatid)
+        public async Task DeleteAsync(int userId, int chatid, int id)
         {
-            throw new NotImplementedException();
+            if (null == (await _chatRepository.GetByIdAsync(chatid))
+                .Users
+                .Where(user=>user.UserId == userId)
+                .FirstOrDefault())
+            {
+                throw new ApiException("Invalid operation", ApiException.ExceptionStatus.BadRequest);
+            }
+            _messageRepository.Delete(chatid,id);
+
+            await  _messageRepository.SaveChangesAsync();
         }
 
-     
-
-        public Task SendAsync(CreateChatDto chatDto)
+        public async Task<List<MessageDto>> GetAllAsync(int userId, int chatid, int offset, int limit)
         {
-            throw new NotImplementedException();
+            return _mapper.Map<List<MessageDto>>(await _messageRepository.GetAllAsync( userId,chatid, offset,limit));
         }
 
-        public Task<MessageDto> UpdateAsync(int chatid, int id, MessageDto chatDto)
+        public async Task SendAsync(int userId, MessageDto messageDto)
         {
-            throw new NotImplementedException();
+            if(userId!=messageDto.UserId)
+            {
+                throw new ApiException("Invalid operation", ApiException.ExceptionStatus.BadRequest);
+            }
+
+            var message = _mapper.Map<Message>(messageDto);
+
+            var chatMessage = _mapper.Map<ChatMessage>(messageDto);
+
+            await _messageRepository.SendAsync(chatMessage, message);
+
+            await _messageRepository.SaveChangesAsync();
+        }
+
+        public async Task UpdateAsync(int userId, int chatid, int id, string content)
+        {
+            if (null == (await _chatRepository.GetByIdAsync(chatid))
+                .Users
+                .Where(user => user.UserId == userId)
+                .FirstOrDefault())
+            {
+                throw new ApiException("Invalid operation", ApiException.ExceptionStatus.BadRequest);
+            }
+
+            var chatMessage = await _messageRepository.GetByIdAsync(chatid,id);
+
+            var message = chatMessage.Message;
+
+            message.Content = content;
+
+            _messageRepository.Update(message);
+
+            await _messageRepository.SaveChangesAsync();
+
+
         }
     }
 }

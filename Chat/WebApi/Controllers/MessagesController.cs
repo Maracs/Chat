@@ -1,4 +1,5 @@
 ﻿using Application.Dtos;
+using Application.Extentions;
 using Application.Ports.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -15,22 +16,31 @@ namespace WebApi.Controllers
             _messageService = messageService;
         }
 
+        
+
         [HttpPut("{chatid}/{id}/status")]
-        public async Task<ActionResult<MessageDto>> ChangeMessageStatusAsync([FromRoute] int chatid, [FromRoute] int id, [FromBody] string status)
+        public async Task<ActionResult> ChangeMessageStatusAsync([FromRoute] int chatid, [FromRoute] int id, [FromBody] string status)
         {
-            return Ok(await _messageService.ChangeMessageStatusAsync(chatid,id,status));
+            var userId = User.GetUserId();
+            await _messageService.ChangeMessageStatusAsync(userId, chatid, id, status);
+
+            return Ok();
         }
 
         [HttpGet("{chatid}")]
-        public async Task<ActionResult<List<MessageDto>>> GetAllAsync([FromRoute] int chatid)
+        public async Task<ActionResult<List<MessageDto>>> GetAllAsync([FromRoute] int chatid,[FromQuery] int offset = 0, [FromQuery] int limit = 100)
         {
-            return Ok(await _messageService.GetByIdAsync(chatid));
+            var userId = User.GetUserId();
+
+            return Ok(await _messageService.GetAllAsync(userId,chatid, offset, limit));
         }
 
         [HttpPost("{chatid}")]
         public async Task<ActionResult> SendAsync([FromBody] MessageDto messageDto)
         {
-            await _messageService.SendAsync(messageDto);
+            var userId = User.GetUserId();
+            await _messageService.SendAsync(userId,messageDto);
+
             return Ok();
         }
 
@@ -38,14 +48,18 @@ namespace WebApi.Controllers
         [HttpDelete("{chatid}/{id}")]
         public async Task<ActionResult> DeleteAsync([FromRoute] int chatid, [FromRoute] int id)
         {
-            await _messageService.DeleteAsync(chatid,id);
+            var userId = User.GetUserId();
+            await _messageService.DeleteAsync(userId,chatid, id);
+
             return Ok();
         }
 
         [HttpPut("{chatid}/{id}")]
-        public async Task<ActionResult> UpdateAsync([FromRoute] int chatid, [FromRoute] int id, [FromBody] MessageDto messageDto)
+        public async Task<ActionResult> UpdateAsync([FromRoute] int chatid, [FromRoute] int id, [FromBody] string content)
         {
-            await _messageService.UpdateAsync(chatid, id, messageDto);
+            var userId = User.GetUserId();
+            await _messageService.UpdateAsync(userId,chatid, id, content);
+
             return Ok();
         }
     }

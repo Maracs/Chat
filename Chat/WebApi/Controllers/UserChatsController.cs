@@ -1,4 +1,5 @@
 ﻿using Application.Dtos;
+using Application.Extentions;
 using Application.Ports.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -11,7 +12,6 @@ namespace WebApi.Controllers
     {
         private readonly IUserChatService _userChatsService;
 
-        const int userId = 1;
 
         public UserChatsController(IUserChatService userChatsService)
         {
@@ -21,14 +21,18 @@ namespace WebApi.Controllers
         [HttpPost]
         public async Task<ActionResult> CreateAsync([FromBody] UserChatDto userChatDto)
         {
+            var userId = User.GetUserId();
             await _userChatsService.CreateAsync(userId,userChatDto);
+
             return Ok();
         }
 
         [HttpDelete]
         public async Task<ActionResult> DeleteAsync([FromBody] UserChatDto userChatDto)
         {
+            var userId = User.GetUserId();
             await _userChatsService.DeleteAsync(userId,userChatDto);
+
             return Ok();
         }
     }

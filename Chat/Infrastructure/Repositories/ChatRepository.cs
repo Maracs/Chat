@@ -2,6 +2,7 @@
 using Domain.Interfaces;
 using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 
 namespace Infrastructure.Repositories
@@ -21,17 +22,20 @@ namespace Infrastructure.Repositories
            await _db.Chats.AddAsync(chat);
         }
 
-        public async Task DeleteAsync(int id)
+        public  void Delete(int id)
         {
             var user = _db.Chats.Where(chat => chat.Id == id).Single();
            _db.Chats.Remove(user);
         }
 
-        public async Task<List<Chat>> GetAllAsync(int offset,int limit)
+        public async Task<List<Chat>> GetAllAsync(int userId,int offset,int limit)
         {
             
             return await _db.Chats
+                .Include(chat=>chat.Users)
+                .Include(chat=>chat.Messages)
                 .AsNoTracking()
+                .Where(chat=>chat.Users.Where(users=>users.UserId==userId).FirstOrDefault()!=null)
                 .Skip(offset)
                 .Take(limit)
                 .ToListAsync();
@@ -41,7 +45,7 @@ namespace Infrastructure.Repositories
 
         public async Task<Chat> GetByIdAsync(int id)
         {
-
+            
             return await _db.Chats.FindAsync(id);
         }
 
@@ -50,7 +54,7 @@ namespace Infrastructure.Repositories
            await _db.SaveChangesAsync();
         }
 
-        public void UpdateAsync(Chat chat)
+        public void Update(Chat chat)
         {
              _db.Chats.Update(chat);
         }

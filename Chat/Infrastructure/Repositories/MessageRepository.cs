@@ -32,7 +32,7 @@ namespace Infrastructure.Repositories
 
         }
 
-        public async void DeleteAsync(int chatid, int id)
+        public async void Delete(int chatid, int id)
         {
            var chatMessage = await _db.ChatMessages.Where(message=>message.ChatId==chatid && message.UserId == id).SingleAsync();
            var message = chatMessage.Message;
@@ -40,9 +40,19 @@ namespace Infrastructure.Repositories
             _db.Remove(chatMessage);
         }
 
-        public Task<List<Chat>> GetByIdAsync(int chatid)
+        public Task<List<ChatMessage>> GetAllAsync(int userId, int chatid, int offset, int limit)
         {
-            return _db.Chats.Include(chat=>chat.Messages).Where(chat=>chat.Id == chatid).ToListAsync();
+            return _db.ChatMessages.Include(chat => chat.Message)
+                .Include(chat=>chat.MessageStatus)
+                .Where(message => message.ChatId == chatid && message.MessageId == userId)
+                .Skip(offset)
+                .Take(limit)
+                .ToListAsync() ;
+        }
+
+        public Task<ChatMessage> GetByIdAsync(int chatid,int id)
+        {
+            return _db.ChatMessages.Include(chat=>chat.Message).Where(message=> message.ChatId == chatid && message.MessageId==id).SingleAsync();
         }
 
         public async Task SaveChangesAsync()
@@ -59,7 +69,7 @@ namespace Infrastructure.Repositories
         }
 
 
-        public void UpdateAsync(Message message)
+        public void Update(Message message)
         {
             _db.Update(message);
         }
