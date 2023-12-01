@@ -14,6 +14,8 @@ namespace Application.AutoMapperProfiles
         public ChatsProfile()
         {
             CreateMap<Chat, ChatDto>();
+
+            CreateMap<ChatUser, UserChatDto>();
         }
     }
 }

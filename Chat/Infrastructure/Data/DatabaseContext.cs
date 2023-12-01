@@ -9,8 +9,6 @@ namespace Infrastructure.Data
         public DatabaseContext(DbContextOptions<DatabaseContext> options)
            : base(options) 
         {
-            Database.EnsureDeleted();
-            Database.EnsureCreated();
         }
 
         public DbSet<Chat> Chats { get; set; }

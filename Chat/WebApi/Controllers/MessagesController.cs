@@ -24,7 +24,7 @@ namespace WebApi.Controllers
             var userId = User.GetUserId();
             await _messageService.ChangeMessageStatusAsync(userId, chatid, id, status);
 
-            return Ok();
+            return NoContent();
         }
 
         [HttpGet("{chatid}")]
@@ -41,7 +41,7 @@ namespace WebApi.Controllers
             var userId = User.GetUserId();
             await _messageService.SendAsync(userId,messageDto);
 
-            return Ok();
+            return NoContent();
         }
 
       
@@ -51,7 +51,7 @@ namespace WebApi.Controllers
             var userId = User.GetUserId();
             await _messageService.DeleteAsync(userId,chatid, id);
 
-            return Ok();
+            return NoContent();
         }
 
         [HttpPut("{chatid}/{id}")]
@@ -60,7 +60,7 @@ namespace WebApi.Controllers
             var userId = User.GetUserId();
             await _messageService.UpdateAsync(userId,chatid, id, content);
 
-            return Ok();
+            return NoContent();
         }
     }
 }

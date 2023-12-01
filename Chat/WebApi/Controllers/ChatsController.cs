@@ -42,7 +42,7 @@ namespace WebApi.Controllers
             var userId = User.GetUserId();
             await _chatService.CreateAsync(userId,chatDto);
 
-            return Ok();
+            return NoContent();
         }
 
         [HttpDelete("{id}")]
@@ -51,7 +51,7 @@ namespace WebApi.Controllers
             var userId = User.GetUserId();
             await _chatService.DeleteAsync(userId,id);
 
-            return Ok();
+            return NoContent();
         }
 
         [HttpPut("{id}")]
@@ -60,7 +60,7 @@ namespace WebApi.Controllers
             var userId = User.GetUserId();
             await _chatService.UpdateAsync(userId, id, chatDto);
 
-            return Ok();
+            return NoContent();
         }
     }
 }

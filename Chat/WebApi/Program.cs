@@ -28,6 +28,7 @@ namespace WebApi
             });
 
             builder.Services.AddAutoMapper(typeof(ChatsProfile).Assembly);
+            builder.Services.AddAutoMapper(typeof(MessageProfile).Assembly);
             
 
 
@@ -69,7 +70,7 @@ namespace WebApi
 
             
 
-            app.UseExceptionHandlerMiddleware();
+           // app.UseExceptionHandlerMiddleware();
 
             app.UseAuthentication();
             app.UseAuthorization();

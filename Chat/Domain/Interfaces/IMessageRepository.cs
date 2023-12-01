@@ -17,6 +17,8 @@ namespace Domain.Interfaces
 
         Task SendAsync(ChatMessage chatMessage, Message message);
 
+        Task<int> GetStatusAsync(string status);
+
         void Delete(int chatid, int id);
 
         void Update(Message message);

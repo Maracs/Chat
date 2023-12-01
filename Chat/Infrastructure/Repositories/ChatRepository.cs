@@ -30,15 +30,19 @@ namespace Infrastructure.Repositories
 
         public async Task<List<Chat>> GetAllAsync(int userId,int offset,int limit)
         {
-            
-            return await _db.Chats
-                .Include(chat=>chat.Users)
-                .Include(chat=>chat.Messages)
-                .AsNoTracking()
-                .Where(chat=>chat.Users.Where(users=>users.UserId==userId).FirstOrDefault()!=null)
+
+            var chats = await _db.Chats
+                .Include(chat => chat.Users)
+                .Include(chat => chat.Messages)
+                    .ThenInclude(message=>message.Message)
+                .Include(chat => chat.Messages)
+                    .ThenInclude(message => message.MessageStatus)
+                .AsNoTracking().ToListAsync();
+
+            return chats
+                .Where(chat=>chat.Users.Where(users=>users.UserId==userId).FirstOrDefault()!=null || chat.CreatorId == userId)
                 .Skip(offset)
-                .Take(limit)
-                .ToListAsync();
+                .Take(limit).ToList();
         }
 
         
@@ -46,7 +50,15 @@ namespace Infrastructure.Repositories
         public async Task<Chat> GetByIdAsync(int id)
         {
             
-            return await _db.Chats.FindAsync(id);
+            return await _db.Chats
+                .Include(chat=>chat.Users)
+                .Include(chat=>chat.Messages)
+                    .ThenInclude(message => message.Message)
+                .Include(chat => chat.Messages)
+                    .ThenInclude(message => message.MessageStatus)
+                .AsNoTracking()
+                .Where(chat=>chat.Id==id)
+                .SingleAsync();
         }
 
         public async Task SaveChangesAsync()

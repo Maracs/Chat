@@ -19,6 +19,6 @@ namespace Domain.Entities
 
         public DateTime SendTime { get; set; }
         public int UserId { get; set; }
-        public ChatUser User { get; set; } = null!;
+        
     }
 }

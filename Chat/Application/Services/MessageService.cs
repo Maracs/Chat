@@ -4,7 +4,8 @@ using Application.Ports.Services;
 using AutoMapper;
 using Domain.Entities;
 using Domain.Interfaces;
-
+using Microsoft.AspNetCore.Identity;
+using System;
 
 namespace Application.Services
 {
@@ -26,7 +27,12 @@ namespace Application.Services
 
         public async Task ChangeMessageStatusAsync(int userId, int chatid, int id, string status)
         {
-            if(userId!=id)
+            var chat = await _chatRepository.GetByIdAsync(chatid);
+
+            if (null == chat
+                .Users
+                .Where(user => user.UserId == userId)
+                .FirstOrDefault() && chat.CreatorId != userId)
             {
                 throw new ApiException("Invalid operation", ApiException.ExceptionStatus.BadRequest);
             }
@@ -36,10 +42,12 @@ namespace Application.Services
 
         public async Task DeleteAsync(int userId, int chatid, int id)
         {
-            if (null == (await _chatRepository.GetByIdAsync(chatid))
+            var chat = await _chatRepository.GetByIdAsync(chatid);
+
+            if (null == chat
                 .Users
                 .Where(user=>user.UserId == userId)
-                .FirstOrDefault())
+                .FirstOrDefault() && chat.CreatorId != userId)
             {
                 throw new ApiException("Invalid operation", ApiException.ExceptionStatus.BadRequest);
             }
@@ -64,6 +72,8 @@ namespace Application.Services
 
             var chatMessage = _mapper.Map<ChatMessage>(messageDto);
 
+            chatMessage.MessageStatusId = await _messageRepository.GetStatusAsync(messageDto.Status);
+
             await _messageRepository.SendAsync(chatMessage, message);
 
             await _messageRepository.SaveChangesAsync();
@@ -71,10 +81,12 @@ namespace Application.Services
 
         public async Task UpdateAsync(int userId, int chatid, int id, string content)
         {
-            if (null == (await _chatRepository.GetByIdAsync(chatid))
+            var chat = await _chatRepository.GetByIdAsync(chatid);
+
+            if (null == chat
                 .Users
                 .Where(user => user.UserId == userId)
-                .FirstOrDefault())
+                .FirstOrDefault() && chat.CreatorId != userId)
             {
                 throw new ApiException("Invalid operation", ApiException.ExceptionStatus.BadRequest);
             }

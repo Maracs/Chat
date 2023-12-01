@@ -25,7 +25,7 @@ namespace Application.Services
             {
                 throw new ApiException("Invalid operation", ApiException.ExceptionStatus.BadRequest);
             }
-           await _userChatRepository.CreateAsync(new ChatUser() {ChatId = userChatDto.ChatId,UserId = userChatDto.UserId });
+           await _userChatRepository.CreateAsync(new ChatUser() {ChatId = userChatDto.ChatId,UserId = userChatDto.UserId, JoinTime = DateTime.Now });
            await _userChatRepository.SaveChangesAsync();
         }
 
@@ -39,5 +39,5 @@ namespace Application.Services
             await _userChatRepository.SaveChangesAsync();
         }
     }
-    }
+    
 }

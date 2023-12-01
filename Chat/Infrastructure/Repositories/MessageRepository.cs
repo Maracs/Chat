@@ -22,29 +22,33 @@ namespace Infrastructure.Repositories
 
         public async Task ChangeMessageStatusAsync(int chatid, int id, string status)
         {
-            var message = await _db.ChatMessages.Where(message=>message.ChatId==chatid && message.UserId == id).SingleAsync();
+            var message = await _db.ChatMessages.Where(message=>message.ChatId==chatid && message.MessageId == id).SingleAsync();
 
-            var statusId = await _db.MessageStatuses.Where(s => s.Status == status).SingleAsync();
-
-            message.MessageStatusId = statusId.Id;
+            message.MessageStatusId = await GetStatusAsync(status);
 
             _db.Update(message);
 
         }
 
-        public async void Delete(int chatid, int id)
+        public async Task<int> GetStatusAsync(string status)
         {
-           var chatMessage = await _db.ChatMessages.Where(message=>message.ChatId==chatid && message.UserId == id).SingleAsync();
-           var message = chatMessage.Message;
-            _db.Remove(message);
+            return (await _db.MessageStatuses.Where(s => s.Status == status).SingleAsync()).Id;
+        }
+
+        public void Delete(int chatid, int id)
+        {
+           var chatMessage = _db.ChatMessages.Where(message=> message.MessageId == id).Single();
+           var message = _db.Messages.Where(message => message.Id == id).Single(); 
             _db.Remove(chatMessage);
+            _db.Remove(message);
+            
         }
 
         public Task<List<ChatMessage>> GetAllAsync(int userId, int chatid, int offset, int limit)
         {
             return _db.ChatMessages.Include(chat => chat.Message)
                 .Include(chat=>chat.MessageStatus)
-                .Where(message => message.ChatId == chatid && message.MessageId == userId)
+                .Where(message => message.ChatId == chatid && message.UserId == userId)
                 .Skip(offset)
                 .Take(limit)
                 .ToListAsync() ;
