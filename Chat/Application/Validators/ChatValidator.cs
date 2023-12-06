@@ -9,9 +9,7 @@ namespace Application.Validators
         public ChatValidator()
         {
             RuleFor(dto =>dto.CreatorId).NotEmpty();
-
             RuleFor(dto=>dto.Name).NotEmpty();
-
             RuleFor(dto=>dto.Id).NotEmpty();
         }
     }

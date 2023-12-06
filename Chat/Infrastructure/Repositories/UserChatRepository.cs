@@ -7,26 +7,26 @@ namespace Infrastructure.Repositories
 {
     public class UserChatRepository : IUserChatRepository
     {
-        private readonly DatabaseContext _db;
+        private readonly DatabaseContext _databaseContext;
 
         public UserChatRepository(DatabaseContext db)
         {
-            _db = db;
+            _databaseContext = db;
         }
 
         public async Task CreateAsync(ChatUser userChat)
         {
-          await _db.ChatUsers.AddAsync(userChat);
+          await _databaseContext.ChatUsers.AddAsync(userChat);
         }
 
         public void Delete(ChatUser userChat)
         {
-            _db.ChatUsers.Remove(userChat);
+            _databaseContext.ChatUsers.Remove(userChat);
         }
 
         public async Task SaveChangesAsync()
         {
-           await _db.SaveChangesAsync();
+           await _databaseContext.SaveChangesAsync();
         }
     }
 }

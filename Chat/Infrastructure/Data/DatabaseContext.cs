@@ -6,16 +6,16 @@ namespace Infrastructure.Data
 {
     public class DatabaseContext: DbContext
     {
-        public DatabaseContext(DbContextOptions<DatabaseContext> options)
-           : base(options) 
-        {
-        }
-
         public DbSet<Chat> Chats { get; set; }
         public DbSet<ChatMessage> ChatMessages { get; set; }
         public DbSet<ChatUser> ChatUsers { get; set; }
         public DbSet<Message> Messages { get; set; }
         public DbSet<MessageStatus> MessageStatuses { get; set; }
+
+        public DatabaseContext(DbContextOptions<DatabaseContext> options)
+           : base(options)
+        {
+        }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

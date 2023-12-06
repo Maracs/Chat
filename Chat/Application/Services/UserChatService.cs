@@ -8,9 +8,7 @@ namespace Application.Services
 {
     public class UserChatService : IUserChatService
     {
-
         private readonly IUserChatRepository _userChatRepository;
-
         private readonly IChatRepository _chatRepository;
 
         public UserChatService(IUserChatRepository userChatRepository, IChatRepository chatRepository)
@@ -19,25 +17,32 @@ namespace Application.Services
             _chatRepository = chatRepository;
         }
 
-        public async Task CreateAsync(int userId, UserChatDto userChatDto)
+        public async Task CreateAsync(int userId, UserChatDto userChatDto, CancellationToken token)
         {
-          if(userId!=(await _chatRepository.GetByIdAsync(userChatDto.ChatId)).CreatorId)
-            {
-                throw new ApiException("Invalid operation", ApiException.ExceptionStatus.BadRequest);
-            }
-           await _userChatRepository.CreateAsync(new ChatUser() {ChatId = userChatDto.ChatId,UserId = userChatDto.UserId, JoinTime = DateTime.Now });
-           await _userChatRepository.SaveChangesAsync();
-        }
+            var creatorId = (await _chatRepository.GetByIdAsync(userChatDto.ChatId)).CreatorId;
 
-        public async Task DeleteAsync(int userId, UserChatDto userChatDto)
-        {
-            if (userId != (await _chatRepository.GetByIdAsync(userChatDto.ChatId)).CreatorId)
+            if (userId != creatorId)
             {
-                throw new ApiException("Invalid operation", ApiException.ExceptionStatus.BadRequest);
+               throw new ApiException("Invalid operation", ExceptionStatus.Status.BadRequest);
             }
-            _userChatRepository.Delete(new ChatUser() { ChatId = userChatDto.ChatId, UserId = userChatDto.UserId });
+
+            await _userChatRepository.CreateAsync(new ChatUser() {ChatId = userChatDto.ChatId,UserId = userChatDto.UserId, JoinTime = DateTime.Now });
+            token.ThrowIfCancellationRequested();
             await _userChatRepository.SaveChangesAsync();
         }
-    }
-    
+
+        public async Task DeleteAsync(int userId, UserChatDto userChatDto, CancellationToken token)
+        {
+            var creatorId = (await _chatRepository.GetByIdAsync(userChatDto.ChatId)).CreatorId;
+
+            if (userId != creatorId)
+            {
+                throw new ApiException("Invalid operation", ExceptionStatus.Status.BadRequest);
+            }
+
+            _userChatRepository.Delete(new ChatUser() { ChatId = userChatDto.ChatId, UserId = userChatDto.UserId });
+            token.ThrowIfCancellationRequested();
+            await _userChatRepository.SaveChangesAsync();
+        }
+    }   
 }

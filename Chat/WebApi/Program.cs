@@ -10,6 +10,7 @@ using Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
 using FluentValidation.AspNetCore;
 using Application.AutoMapperProfiles;
+using WebApi.Extentions;
 
 namespace WebApi
 {
@@ -26,39 +27,16 @@ namespace WebApi
                     builder => builder.MigrationsAssembly("Infrastructure"));
                 options.LogTo(Console.WriteLine);
             });
-
+            builder.Services.AddScoped<CancellationTokenSource>();
             builder.Services.AddAutoMapper(typeof(ChatsProfile).Assembly);
-            builder.Services.AddAutoMapper(typeof(MessageProfile).Assembly);
-            
-
-
-            builder.Services.AddScoped<IChatRepository,ChatRepository>();
-            builder.Services.AddScoped<IMessageRepository,MessageRepository>();
-            builder.Services.AddScoped<IUserChatRepository,UserChatRepository>();
-        
-
-            builder.Services.AddScoped<IChatService, ChatService>();
-            builder.Services.AddScoped<IMessageService, MessageService>();
-            builder.Services.AddScoped<IUserChatService, UserChatService>();
-           
-
+            builder.Services.ConfigureRepositories();
+            builder.Services.ConfigureServices();
             builder.Services.AddIdentityService(builder.Configuration);
             builder.Services.AddSwaggerService();
-
             builder.Services.AddControllers();
-
-            
-            builder.Services.AddFluentValidationAutoValidation();
-            builder.Services.AddScoped<IValidator<ChatDto>, ChatValidator>();
-            builder.Services.AddScoped<IValidator<CreateChatDto>, CreateChatValidator>();
-            builder.Services.AddScoped<IValidator<MessageDto>, MessageValidator>();
-            builder.Services.AddScoped<IValidator<UserChatDto>, UserChatValidator>();
-            
-
-
+            builder.Services.ConfigureValidation();
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
-
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -68,16 +46,10 @@ namespace WebApi
                 app.UseSwaggerUI();
             }
 
-            
-
-           app.UseExceptionHandlerMiddleware();
-
+            app.UseExceptionHandlerMiddleware();
             app.UseAuthentication();
             app.UseAuthorization();
-
-
             app.MapControllers();
-
             app.Run();
         }
     }

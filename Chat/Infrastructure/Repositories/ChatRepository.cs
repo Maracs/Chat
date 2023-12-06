@@ -9,39 +9,39 @@ namespace Infrastructure.Repositories
     public class ChatRepository : IChatRepository
     {
 
-        private readonly DatabaseContext _db;
+        private readonly DatabaseContext _databaseContext;
 
         public ChatRepository(DatabaseContext db)
         {
-            _db = db;
+            _databaseContext = db;
         }
 
         public async Task CreateAsync(Chat chat)
         {
-           await _db.Chats.AddAsync(chat);
+           await _databaseContext.Chats.AddAsync(chat);
         }
 
         public  void Delete(int id)
         {
-            var user = _db.Chats.Where(chat => chat.Id == id).Single();
-           _db.Chats.Remove(user);
+            var chat = new Chat() { Id = id };
+           _databaseContext.Chats.Remove(chat);
         }
 
         public async Task<List<Chat>> GetAllAsync(int userId,int offset,int limit)
         {
 
-            var chats = await _db.Chats
+            var chats = await _databaseContext.Chats
                 .Include(chat => chat.Users)
+                .Where(chat => chat.Users.Where(users => users.UserId == userId).FirstOrDefault() != null || chat.CreatorId == userId)
+                .Skip(offset)
+                .Take(limit)
                 .Include(chat => chat.Messages)
                     .ThenInclude(message=>message.Message)
                 .Include(chat => chat.Messages)
                     .ThenInclude(message => message.MessageStatus)
                 .AsNoTracking().ToListAsync();
 
-            return chats
-                .Where(chat=>chat.Users.Where(users=>users.UserId==userId).FirstOrDefault()!=null || chat.CreatorId == userId)
-                .Skip(offset)
-                .Take(limit).ToList();
+            return chats;
         }
 
         
@@ -49,7 +49,7 @@ namespace Infrastructure.Repositories
         public async Task<Chat> GetByIdAsync(int id)
         {
             
-            return await _db.Chats
+            return await _databaseContext.Chats
                 .Include(chat=>chat.Users)
                 .Include(chat=>chat.Messages)
                     .ThenInclude(message => message.Message)
@@ -62,12 +62,12 @@ namespace Infrastructure.Repositories
 
         public async Task SaveChangesAsync()
         {
-           await _db.SaveChangesAsync();
+           await _databaseContext.SaveChangesAsync();
         }
 
         public void Update(Chat chat)
         {
-             _db.Chats.Update(chat);
+             _databaseContext.Chats.Update(chat);
         }
     }
 }

@@ -1,8 +1,8 @@
-﻿using Application.Middlewares;
+﻿using WebApi.Middlewares;
 using Microsoft.AspNetCore.Builder;
 
 
-namespace Application.Extentions
+namespace WebApi.Extentions
 {
     public static class ExceptionHandlerExtension
     {

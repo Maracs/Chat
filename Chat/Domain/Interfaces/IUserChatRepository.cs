@@ -5,9 +5,9 @@ namespace Domain.Interfaces
 {
     public interface IUserChatRepository
     {
-        void Delete(ChatUser userChatD);
+        void Delete(ChatUser userChat);
         
-        Task CreateAsync(ChatUser userChatD);
+        Task CreateAsync(ChatUser userChat);
 
         Task SaveChangesAsync();
     }

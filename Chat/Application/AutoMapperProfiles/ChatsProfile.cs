@@ -1,6 +1,7 @@
 ﻿using Application.Dtos;
 using AutoMapper;
 using Domain.Entities;
+using System;
 
 
 namespace Application.AutoMapperProfiles
@@ -10,8 +11,8 @@ namespace Application.AutoMapperProfiles
         public ChatsProfile()
         {
             CreateMap<Chat, ChatDto>();
-
             CreateMap<ChatUser, UserChatDto>();
+            CreateMap<CreateChatDto, Chat>();
         }
     }
 }

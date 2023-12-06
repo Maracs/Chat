@@ -12,11 +12,13 @@ namespace WebApi.Controllers
     public class ChatsController : ControllerBase
     {
         private readonly IChatService _chatService;
+        private readonly CancellationTokenSource _source;
 
-      
-        public ChatsController(IChatService chatService)
+
+        public ChatsController(IChatService chatService, CancellationTokenSource source)
         {
             _chatService = chatService;
+            _source = source;
         }
 
         [HttpGet("{id}")]
@@ -24,7 +26,7 @@ namespace WebApi.Controllers
         {
             var userId = User.GetUserId();
 
-            return Ok(await _chatService.GetByIdAsync(userId,id));
+            return Ok(await _chatService.GetByIdAsync(userId,id,_source.Token));
         }
 
         [HttpGet]
@@ -32,14 +34,14 @@ namespace WebApi.Controllers
         {
             var userId = User.GetUserId();
 
-            return Ok(await _chatService.GetAllAsync(userId, offset, limit));
+            return Ok(await _chatService.GetAllAsync(userId, offset, limit,_source.Token));
         }
 
         [HttpPost]
         public async Task<ActionResult> CreateAsync([FromBody] CreateChatDto chatDto)
         {
             var userId = User.GetUserId();
-            await _chatService.CreateAsync(userId,chatDto);
+            await _chatService.CreateAsync(userId,chatDto, _source.Token);
 
             return NoContent();
         }
@@ -48,7 +50,7 @@ namespace WebApi.Controllers
         public async Task<ActionResult> DeleteAsync([FromRoute] int id)
         {
             var userId = User.GetUserId();
-            await _chatService.DeleteAsync(userId,id);
+            await _chatService.DeleteAsync(userId,id, _source.Token);
 
             return NoContent();
         }
@@ -57,7 +59,7 @@ namespace WebApi.Controllers
         public async Task<ActionResult> UpdateAsync([FromRoute] int id,[FromBody] CreateChatDto chatDto)
         {
             var userId = User.GetUserId();
-            await _chatService.UpdateAsync(userId, id, chatDto);
+            await _chatService.UpdateAsync(userId, id, chatDto, _source.Token);
 
             return NoContent();
         }

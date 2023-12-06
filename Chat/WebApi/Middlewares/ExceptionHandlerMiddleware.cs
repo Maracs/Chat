@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
 using FluentValidation;
 
-namespace Application.Middlewares
+namespace WebApi.Middlewares
 {
     public class ExceptionHandlerMiddleware
     {
@@ -65,11 +65,11 @@ namespace Application.Middlewares
 
             var result = JsonConvert.SerializeObject(new
             {
-                StatusCode = ApiException.ExceptionStatus.BadRequest,
+                StatusCode = ExceptionStatus.Status.BadRequest,
                 ErrorMessage = message
             });
             context.Response.ContentType = "application/json";
-            context.Response.StatusCode = (int)ApiException.ExceptionStatus.BadRequest;
+            context.Response.StatusCode = (int)ExceptionStatus.Status.BadRequest;
             await context.Response.WriteAsync(result);
         }
     }

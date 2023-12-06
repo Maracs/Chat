@@ -9,13 +9,9 @@ namespace Application.Validators
         public MessageValidator()
         {
             RuleFor(dto=>dto.Content).NotEmpty();
-
             RuleFor(dto=>dto.SendTime).NotEmpty();
-
             RuleFor(dto=>dto.ChatId).NotEmpty();
-
             RuleFor(dto => dto.UserId).NotEmpty();
-
             RuleFor(dto=>dto.Status).NotEmpty();
         }
     }
