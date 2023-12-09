@@ -12,18 +12,18 @@ namespace WebApi.Controllers
     public class MessagesController : ControllerBase
     {
         private readonly IMessageService _messageService;
-        private readonly CancellationTokenSource _source;
+        
 
-        public MessagesController(IMessageService messageService, CancellationTokenSource source)
+        public MessagesController(IMessageService messageService)
         {
             _messageService = messageService;
-            _source = source;
+            
         }
 
         
 
         [HttpPut("{chatid}/{id}/status")]
-        public async Task<ActionResult> ChangeMessageStatusAsync([FromRoute] int chatid, [FromRoute] int id, [FromBody] string status)
+        public async Task<ActionResult> ChangeMessageStatusAsync([FromRoute] int chatid, [FromRoute] int id, [FromBody] string status,CancellationTokenSource _source)
         {
             var userId = User.GetUserId();
             await _messageService.ChangeMessageStatusAsync(userId, chatid, id, status,_source.Token);
@@ -32,7 +32,7 @@ namespace WebApi.Controllers
         }
 
         [HttpGet("{chatid}")]
-        public async Task<ActionResult<List<MessageDto>>> GetAllAsync([FromRoute] int chatid,[FromQuery] int offset = 0, [FromQuery] int limit = 100)
+        public async Task<ActionResult<List<MessageDto>>> GetAllAsync([FromRoute] int chatid,[FromQuery] int offset = 0, [FromQuery] int limit = 100,CancellationTokenSource _source)
         {
             var userId = User.GetUserId();
 
@@ -40,7 +40,7 @@ namespace WebApi.Controllers
         }
 
         [HttpPost("{chatid}")]
-        public async Task<ActionResult> SendAsync([FromBody] MessageDto messageDto)
+        public async Task<ActionResult> SendAsync([FromBody] MessageDto messageDto,CancellationTokenSource _source)
         {
             var userId = User.GetUserId();
             await _messageService.SendAsync(userId,messageDto,_source.Token);
@@ -50,7 +50,7 @@ namespace WebApi.Controllers
 
       
         [HttpDelete("{chatid}/{id}")]
-        public async Task<ActionResult> DeleteAsync([FromRoute] int chatid, [FromRoute] int id)
+        public async Task<ActionResult> DeleteAsync([FromRoute] int chatid, [FromRoute] int id,CancellationTokenSource _source)
         {
             var userId = User.GetUserId();
             await _messageService.DeleteAsync(userId,chatid,id,_source.Token);
@@ -59,7 +59,7 @@ namespace WebApi.Controllers
         }
 
         [HttpPut("{chatid}/{id}")]
-        public async Task<ActionResult> UpdateAsync([FromRoute] int chatid, [FromRoute] int id, [FromBody] string content)
+        public async Task<ActionResult> UpdateAsync([FromRoute] int chatid, [FromRoute] int id, [FromBody] string content,CancellationTokenSource _source)
         {
             var userId = User.GetUserId();
             await _messageService.UpdateAsync(userId,chatid, id, content,_source.Token);

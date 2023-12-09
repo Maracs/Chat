@@ -5,21 +5,17 @@ namespace Application.Extentions
 {
     public static class SwaggerExtention
     {
-
         public static IServiceCollection AddSwaggerService
             (this IServiceCollection services)
         {
-
             services.AddSwaggerGen(c =>
             {
-
                 c.SwaggerDoc("v1", new OpenApiInfo
                 {
                     Version = "v1",
                     Title = "ChatService",
                     Description = "ChatService Swagger",
                 });
-
                 c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
                 {
                     Description = "JWT Authorization header using the Bearer scheme (Example: 'Bearer 12345abcdef')",
@@ -28,7 +24,6 @@ namespace Application.Extentions
                     Type = SecuritySchemeType.ApiKey,
                     Scheme = "Bearer"
                 });
-
                 c.AddSecurityRequirement(new OpenApiSecurityRequirement
                 {
                     {

@@ -1,7 +1,4 @@
-﻿
-
-
-namespace Application.Dtos
+﻿namespace Application.Dtos
 {
     public class CreateChatDto
     {

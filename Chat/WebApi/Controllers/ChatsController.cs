@@ -12,17 +12,14 @@ namespace WebApi.Controllers
     public class ChatsController : ControllerBase
     {
         private readonly IChatService _chatService;
-        private readonly CancellationTokenSource _source;
-
-
-        public ChatsController(IChatService chatService, CancellationTokenSource source)
+        
+        public ChatsController(IChatService chatService)
         {
             _chatService = chatService;
-            _source = source;
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<ChatDto>> GetByIdAsync([FromRoute] int id)
+        public async Task<ActionResult<ChatDto>> GetByIdAsync([FromRoute] int id,CancellationTokenSource _source)
         {
             var userId = User.GetUserId();
 
@@ -30,7 +27,7 @@ namespace WebApi.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<ChatDto>>> GetAllAsync([FromQuery] int offset = 0, [FromQuery] int limit = 100)
+        public async Task<ActionResult<List<ChatDto>>> GetAllAsync([FromQuery] int offset = 0, [FromQuery] int limit = 100,CancellationTokenSource _source)
         {
             var userId = User.GetUserId();
 
@@ -38,7 +35,7 @@ namespace WebApi.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> CreateAsync([FromBody] CreateChatDto chatDto)
+        public async Task<ActionResult> CreateAsync([FromBody] CreateChatDto chatDto,CancellationTokenSource _source)
         {
             var userId = User.GetUserId();
             await _chatService.CreateAsync(userId,chatDto, _source.Token);
@@ -47,7 +44,7 @@ namespace WebApi.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<ActionResult> DeleteAsync([FromRoute] int id)
+        public async Task<ActionResult> DeleteAsync([FromRoute] int id,CancellationTokenSource _source)
         {
             var userId = User.GetUserId();
             await _chatService.DeleteAsync(userId,id, _source.Token);
@@ -56,7 +53,7 @@ namespace WebApi.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult> UpdateAsync([FromRoute] int id,[FromBody] CreateChatDto chatDto)
+        public async Task<ActionResult> UpdateAsync([FromRoute] int id,[FromBody] CreateChatDto chatDto,CancellationTokenSource _source)
         {
             var userId = User.GetUserId();
             await _chatService.UpdateAsync(userId, id, chatDto, _source.Token);

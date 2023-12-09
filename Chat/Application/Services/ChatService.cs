@@ -23,7 +23,7 @@ namespace Application.Services
         {
             if(userId != chatDto.CreatorId)
             {
-                throw new ApiException("Invalid operation", ExceptionStatus.Status.BadRequest);
+                throw new ApiException("Invalid operation", ExceptionStatus.BadRequest);
             }
 
             var user = new Chat()
@@ -32,8 +32,6 @@ namespace Application.Services
                 CreatorId = chatDto.CreatorId,
                 Info = chatDto.Info,
             };
-
-            
             await _chatRepository.CreateAsync(user);
             token.ThrowIfCancellationRequested();
             await _chatRepository.SaveChangesAsync();
@@ -45,7 +43,7 @@ namespace Application.Services
 
             if(chat.CreatorId!= userId)
             {
-                throw new ApiException("Invalid operation", ExceptionStatus.Status.BadRequest);
+                throw new ApiException("Invalid operation", ExceptionStatus.BadRequest);
             }
 
             _chatRepository.Delete(id);
@@ -64,10 +62,11 @@ namespace Application.Services
 
             if (chat.CreatorId != userId)
             {
-                throw new ApiException("Invalid operation", ExceptionStatus.Status.BadRequest);
+                throw new ApiException("Invalid operation", ExceptionStatus.BadRequest);
             };
 
             token.ThrowIfCancellationRequested();
+
             return _mapper.Map<ChatDto>(chat);
         }
 
@@ -77,7 +76,7 @@ namespace Application.Services
 
             if (chat.CreatorId != userId)
             {
-                throw new ApiException("Invalid operation", ExceptionStatus.Status.BadRequest);
+                throw new ApiException("Invalid operation", ExceptionStatus.BadRequest);
             };
 
             _mapper.Map<CreateChatDto, Chat>(chatDto, chat);

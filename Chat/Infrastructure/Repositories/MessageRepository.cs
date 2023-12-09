@@ -19,9 +19,7 @@ namespace Infrastructure.Repositories
         public async Task ChangeMessageStatusAsync(int chatId, int id, string status)
         {
             var message = await _databaseContext.ChatMessages.Where(message=>message.ChatId==chatId && message.MessageId == id).SingleAsync();
-
             message.MessageStatusId = await GetStatusAsync(status);
-
             _databaseContext.Update(message);
 
         }
@@ -67,7 +65,6 @@ namespace Infrastructure.Repositories
            chatMessage.MessageId = mes.Entity.Id;
            await _databaseContext.ChatMessages.AddAsync(chatMessage);
         }
-
 
         public void Update(Message message)
         {

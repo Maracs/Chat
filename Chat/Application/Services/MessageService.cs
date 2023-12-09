@@ -23,14 +23,15 @@ namespace Application.Services
         public async Task ChangeMessageStatusAsync(int userId, int chatid, int id, string status, CancellationToken token)
         {
             var chat = await _chatRepository.GetByIdAsync(chatid);
+            var user = chat.Users
+                           .Where(user => user.UserId == userId)
+                           .FirstOrDefault();
 
-            if (null == chat
-                .Users
-                .Where(user => user.UserId == userId)
-                .FirstOrDefault() && chat.CreatorId != userId)
+            if (null == user && chat.CreatorId != userId)
             {
-                throw new ApiException("Invalid operation", ExceptionStatus.Status.BadRequest);
+                throw new ApiException("Invalid operation", ExceptionStatus.BadRequest);
             }
+
             await _messageRepository.ChangeMessageStatusAsync(chatid,id,status);
             token.ThrowIfCancellationRequested();
             await _messageRepository.SaveChangesAsync();
@@ -45,7 +46,7 @@ namespace Application.Services
 
             if (null == user && chat.CreatorId != userId)
             {
-                throw new ApiException("Invalid operation", ExceptionStatus.Status.BadRequest);
+                throw new ApiException("Invalid operation", ExceptionStatus.BadRequest);
             }
 
             _messageRepository.Delete(chatid,id);
@@ -65,7 +66,7 @@ namespace Application.Services
         {
             if(userId!=messageDto.UserId)
             {
-                throw new ApiException("Invalid operation", ExceptionStatus.Status.BadRequest);
+                throw new ApiException("Invalid operation", ExceptionStatus.BadRequest);
             }
 
             var message = _mapper.Map<Message>(messageDto);
@@ -85,7 +86,7 @@ namespace Application.Services
 
             if (null == user && chat.CreatorId != userId)
             {
-                throw new ApiException("Invalid operation", ExceptionStatus.Status.BadRequest);
+                throw new ApiException("Invalid operation", ExceptionStatus.BadRequest);
             }
 
             var chatMessage = await _messageRepository.GetByIdAsync(chatid,id);

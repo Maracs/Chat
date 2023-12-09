@@ -3,11 +3,11 @@
     public class ApiException : Exception
     {
         
-        public ExceptionStatus.Status StatusCode { get; private set; }
+        public ExceptionStatus StatusCode { get; private set; }
 
         public ApiException() { }
 
-        public ApiException(string message, ExceptionStatus.Status statusCode) : base(message)
+        public ApiException(string message, ExceptionStatus statusCode) : base(message)
         {
             StatusCode = statusCode;
         }
