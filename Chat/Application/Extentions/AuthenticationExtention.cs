@@ -5,7 +5,6 @@ using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 
-
 namespace Application.Extentions
 {
     public static class AuthenticationExtention

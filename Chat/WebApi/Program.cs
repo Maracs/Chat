@@ -27,7 +27,12 @@ namespace WebApi
                     builder => builder.MigrationsAssembly("Infrastructure"));
                 options.LogTo(Console.WriteLine);
             });
-            builder.Services.AddScoped<CancellationTokenSource>();
+            builder.Services.AddHttpContextAccessor();
+            builder.Services.AddScoped(typeof(CancellationToken), serviceProvider =>
+            {
+                IHttpContextAccessor httpContext = serviceProvider.GetRequiredService<IHttpContextAccessor>();
+                return httpContext.HttpContext?.RequestAborted ?? CancellationToken.None;
+            });
             builder.Services.AddAutoMapper(typeof(ChatsProfile).Assembly);
             builder.Services.ConfigureRepositories();
             builder.Services.ConfigureServices();

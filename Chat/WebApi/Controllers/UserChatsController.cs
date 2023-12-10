@@ -19,19 +19,19 @@ namespace WebApi.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> CreateAsync([FromBody] UserChatDto userChatDto,CancellationTokenSource _source)
+        public async Task<ActionResult> CreateAsync([FromBody] UserChatDto userChatDto, CancellationToken token)
         {
             var userId = User.GetUserId();
-            await _userChatsService.CreateAsync(userId,userChatDto,_source.Token);
+            await _userChatsService.CreateAsync(userId,userChatDto,token);
 
             return NoContent();
         }
 
         [HttpDelete]
-        public async Task<ActionResult> DeleteAsync([FromBody] UserChatDto userChatDto,CancellationTokenSource _source)
+        public async Task<ActionResult> DeleteAsync([FromBody] UserChatDto userChatDto, CancellationToken token)
         {
             var userId = User.GetUserId();
-            await _userChatsService.DeleteAsync(userId,userChatDto,_source.Token);
+            await _userChatsService.DeleteAsync(userId,userChatDto, token);
 
             return NoContent();
         }

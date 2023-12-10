@@ -4,7 +4,6 @@ using Application.Ports.Services;
 using AutoMapper;
 using Domain.Entities;
 using Domain.Interfaces;
-using System.Threading;
 
 namespace Application.Services
 {

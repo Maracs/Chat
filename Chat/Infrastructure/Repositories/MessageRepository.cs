@@ -3,12 +3,10 @@ using Domain.Interfaces;
 using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 
-
 namespace Infrastructure.Repositories
 {
     public class MessageRepository : IMessageRepository
     {
-
         private readonly DatabaseContext _databaseContext;
 
         public MessageRepository(DatabaseContext db)
@@ -21,7 +19,6 @@ namespace Infrastructure.Repositories
             var message = await _databaseContext.ChatMessages.Where(message=>message.ChatId==chatId && message.MessageId == id).SingleAsync();
             message.MessageStatusId = await GetStatusAsync(status);
             _databaseContext.Update(message);
-
         }
 
         public async Task<int> GetStatusAsync(string status)
@@ -34,8 +31,7 @@ namespace Infrastructure.Repositories
            var chatMessage = _databaseContext.ChatMessages.Where(message=> message.MessageId == id).Single();
            var message = _databaseContext.Messages.Where(message => message.Id == id).Single(); 
             _databaseContext.Remove(chatMessage);
-            _databaseContext.Remove(message);
-            
+            _databaseContext.Remove(message);     
         }
 
         public Task<List<ChatMessage>> GetAllAsync(int userId, int chatid, int offset, int limit)

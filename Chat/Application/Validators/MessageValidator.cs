@@ -1,7 +1,6 @@
 ﻿using Application.Dtos;
 using FluentValidation;
 
-
 namespace Application.Validators
 {
     public class MessageValidator:AbstractValidator<MessageDto>

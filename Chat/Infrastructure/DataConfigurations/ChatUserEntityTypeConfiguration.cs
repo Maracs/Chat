@@ -2,7 +2,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-
 namespace Infrastructure.DataConfigurations
 {
     public class ChatUserEntityTypeConfiguration : IEntityTypeConfiguration<ChatUser>

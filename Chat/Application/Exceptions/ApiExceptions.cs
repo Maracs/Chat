@@ -1,8 +1,7 @@
 ﻿namespace Application.Exceptions
 {
     public class ApiException : Exception
-    {
-        
+    {  
         public ExceptionStatus StatusCode { get; private set; }
 
         public ApiException() { }

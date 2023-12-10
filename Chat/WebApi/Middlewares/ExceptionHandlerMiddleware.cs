@@ -65,11 +65,11 @@ namespace WebApi.Middlewares
 
             var result = JsonConvert.SerializeObject(new
             {
-                StatusCode = ExceptionStatus.Status.BadRequest,
+                StatusCode = ExceptionStatus.BadRequest,
                 ErrorMessage = message
             });
             context.Response.ContentType = "application/json";
-            context.Response.StatusCode = (int)ExceptionStatus.Status.BadRequest;
+            context.Response.StatusCode = (int)ExceptionStatus.BadRequest;
             await context.Response.WriteAsync(result);
         }
     }
