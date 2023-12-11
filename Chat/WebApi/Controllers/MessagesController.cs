@@ -18,7 +18,7 @@ namespace WebApi.Controllers
             _messageService = messageService;
         }
 
-        [HttpPut("{chatid}/{id}/status")]
+        [HttpPut("{chatid}/message/{id}/status")]
         public async Task<ActionResult> ChangeMessageStatusAsync([FromRoute] int chatid, [FromRoute] int id, [FromBody] string status, CancellationToken token)
         {
             var userId = User.GetUserId();
@@ -45,7 +45,7 @@ namespace WebApi.Controllers
         }
 
 
-        [HttpDelete("{chatid}/{id}")]
+        [HttpDelete("{chatid}/message/{id}")]
         public async Task<ActionResult> DeleteAsync([FromRoute] int chatid, [FromRoute] int id, CancellationToken token)
         {
             var userId = User.GetUserId();
@@ -54,7 +54,7 @@ namespace WebApi.Controllers
             return NoContent();
         }
 
-        [HttpPut("{chatid}/{id}")]
+        [HttpPut("{chatid}/message/{id}")]
         public async Task<ActionResult> UpdateAsync([FromRoute] int chatid, [FromRoute] int id, [FromBody] string content, CancellationToken token)
         {
             var userId = User.GetUserId();
