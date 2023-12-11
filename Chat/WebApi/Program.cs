@@ -1,15 +1,7 @@
-using Application.Dtos;
-using Application.Extentions;
-using Application.Ports.Services;
-using Application.Services;
-using Application.Validators;
-using Domain.Interfaces;
-using FluentValidation;
-using Infrastructure.Data;
-using Infrastructure.Repositories;
-using Microsoft.EntityFrameworkCore;
-using FluentValidation.AspNetCore;
 using Application.AutoMapperProfiles;
+using Application.Extentions;
+using Infrastructure.Data;
+using Microsoft.EntityFrameworkCore;
 using WebApi.Extentions;
 
 namespace WebApi

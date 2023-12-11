@@ -16,7 +16,7 @@ namespace Infrastructure.Repositories
 
         public async Task CreateAsync(ChatUser userChat)
         {
-          await _databaseContext.ChatUsers.AddAsync(userChat);
+            await _databaseContext.ChatUsers.AddAsync(userChat);
         }
 
         public void Delete(ChatUser userChat)
@@ -26,7 +26,7 @@ namespace Infrastructure.Repositories
 
         public async Task SaveChangesAsync()
         {
-           await _databaseContext.SaveChangesAsync();
+            await _databaseContext.SaveChangesAsync();
         }
     }
 }

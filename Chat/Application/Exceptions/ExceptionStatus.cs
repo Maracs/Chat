@@ -1,9 +1,9 @@
 ﻿namespace Application.Exceptions
 {
-        public enum ExceptionStatus
-        {
-            NotFound = 404,
-            Unauthorized = 401,
-            BadRequest = 400
-        }
+    public enum ExceptionStatus
+    {
+        NotFound = 404,
+        Unauthorized = 401,
+        BadRequest = 400
+    }
 }

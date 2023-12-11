@@ -1,10 +1,10 @@
-﻿using FluentValidation.AspNetCore;
-using FluentValidation;
-using System.Reflection;
-using Application.Ports.Services;
+﻿using Application.Ports.Services;
 using Application.Services;
 using Domain.Interfaces;
+using FluentValidation;
+using FluentValidation.AspNetCore;
 using Infrastructure.Repositories;
+using System.Reflection;
 
 namespace WebApi
 {

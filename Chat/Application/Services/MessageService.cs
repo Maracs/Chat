@@ -32,7 +32,7 @@ namespace Application.Services
                 throw new ApiException("Invalid operation", ExceptionStatus.BadRequest);
             }
 
-            await _messageRepository.ChangeMessageStatusAsync(chatid,id,status);
+            await _messageRepository.ChangeMessageStatusAsync(chatid, id, status);
             token.ThrowIfCancellationRequested();
             await _messageRepository.SaveChangesAsync();
         }
@@ -49,9 +49,9 @@ namespace Application.Services
                 throw new ApiException("Invalid operation", ExceptionStatus.BadRequest);
             }
 
-            _messageRepository.Delete(chatid,id);
+            _messageRepository.Delete(chatid, id);
             token.ThrowIfCancellationRequested();
-            await  _messageRepository.SaveChangesAsync();
+            await _messageRepository.SaveChangesAsync();
         }
 
         public async Task<List<MessageDto>> GetAllAsync(int userId, int chatid, int offset, int limit, CancellationToken token)
@@ -64,7 +64,7 @@ namespace Application.Services
 
         public async Task SendAsync(int userId, MessageDto messageDto, CancellationToken token)
         {
-            if(userId!=messageDto.UserId)
+            if (userId != messageDto.UserId)
             {
                 throw new ApiException("Invalid operation", ExceptionStatus.BadRequest);
             }
@@ -89,7 +89,7 @@ namespace Application.Services
                 throw new ApiException("Invalid operation", ExceptionStatus.BadRequest);
             }
 
-            var chatMessage = await _messageRepository.GetByIdAsync(chatid,id);
+            var chatMessage = await _messageRepository.GetByIdAsync(chatid, id);
             var message = chatMessage.Message;
             message.Content = content;
             _messageRepository.Update(message);

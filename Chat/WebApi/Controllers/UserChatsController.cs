@@ -12,7 +12,7 @@ namespace WebApi.Controllers
     public class UserChatsController : ControllerBase
     {
         private readonly IUserChatService _userChatsService;
-        
+
         public UserChatsController(IUserChatService userChatsService)
         {
             _userChatsService = userChatsService;
@@ -22,7 +22,7 @@ namespace WebApi.Controllers
         public async Task<ActionResult> CreateAsync([FromBody] UserChatDto userChatDto, CancellationToken token)
         {
             var userId = User.GetUserId();
-            await _userChatsService.CreateAsync(userId,userChatDto,token);
+            await _userChatsService.CreateAsync(userId, userChatDto, token);
 
             return NoContent();
         }
@@ -31,7 +31,7 @@ namespace WebApi.Controllers
         public async Task<ActionResult> DeleteAsync([FromBody] UserChatDto userChatDto, CancellationToken token)
         {
             var userId = User.GetUserId();
-            await _userChatsService.DeleteAsync(userId,userChatDto, token);
+            await _userChatsService.DeleteAsync(userId, userChatDto, token);
 
             return NoContent();
         }

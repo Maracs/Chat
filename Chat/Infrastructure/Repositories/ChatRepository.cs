@@ -16,16 +16,16 @@ namespace Infrastructure.Repositories
 
         public async Task CreateAsync(Chat chat)
         {
-           await _databaseContext.Chats.AddAsync(chat);
+            await _databaseContext.Chats.AddAsync(chat);
         }
 
-        public  void Delete(int id)
+        public void Delete(int id)
         {
             var chat = new Chat() { Id = id };
-           _databaseContext.Chats.Remove(chat);
+            _databaseContext.Chats.Remove(chat);
         }
 
-        public async Task<List<Chat>> GetAllAsync(int userId,int offset,int limit)
+        public async Task<List<Chat>> GetAllAsync(int userId, int offset, int limit)
         {
             var chats = await _databaseContext.Chats
                 .Include(chat => chat.Users)
@@ -33,7 +33,7 @@ namespace Infrastructure.Repositories
                 .Skip(offset)
                 .Take(limit)
                 .Include(chat => chat.Messages)
-                    .ThenInclude(message=>message.Message)
+                    .ThenInclude(message => message.Message)
                 .Include(chat => chat.Messages)
                     .ThenInclude(message => message.MessageStatus)
                 .AsNoTracking().ToListAsync();
@@ -42,26 +42,26 @@ namespace Infrastructure.Repositories
         }
 
         public async Task<Chat> GetByIdAsync(int id)
-        {       
+        {
             return await _databaseContext.Chats
-                .Include(chat=>chat.Users)
-                .Include(chat=>chat.Messages)
+                .Include(chat => chat.Users)
+                .Include(chat => chat.Messages)
                     .ThenInclude(message => message.Message)
                 .Include(chat => chat.Messages)
                     .ThenInclude(message => message.MessageStatus)
                 .AsNoTracking()
-                .Where(chat=>chat.Id==id)
+                .Where(chat => chat.Id == id)
                 .SingleAsync();
         }
 
         public async Task SaveChangesAsync()
         {
-           await _databaseContext.SaveChangesAsync();
+            await _databaseContext.SaveChangesAsync();
         }
 
         public void Update(Chat chat)
         {
-             _databaseContext.Chats.Update(chat);
+            _databaseContext.Chats.Update(chat);
         }
     }
 }

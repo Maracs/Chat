@@ -5,7 +5,7 @@
         public int ChatId { get; set; }
         public Chat Chat { get; set; } = null!;
 
-        public int MessageId {get; set; }
+        public int MessageId { get; set; }
         public Message Message { get; set; } = null!;
 
         public int MessageStatusId { get; set; }
@@ -13,6 +13,6 @@
 
         public DateTime SendTime { get; set; }
         public int UserId { get; set; }
-        
+
     }
 }

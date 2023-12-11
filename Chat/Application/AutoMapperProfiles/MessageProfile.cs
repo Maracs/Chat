@@ -5,7 +5,7 @@ using Domain.Entities;
 
 namespace Application.AutoMapperProfiles
 {
-    public class MessageProfile:Profile
+    public class MessageProfile : Profile
     {
         public MessageProfile()
         {

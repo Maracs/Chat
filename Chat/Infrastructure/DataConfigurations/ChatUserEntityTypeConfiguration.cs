@@ -8,7 +8,7 @@ namespace Infrastructure.DataConfigurations
     {
         public void Configure(EntityTypeBuilder<ChatUser> builder)
         {
-            builder.HasKey(chatUser => new { chatUser.UserId, chatUser.ChatId});
+            builder.HasKey(chatUser => new { chatUser.UserId, chatUser.ChatId });
         }
     }
 }

@@ -20,7 +20,7 @@ namespace Application.Services
 
         public async Task CreateAsync(int userId, CreateChatDto chatDto, CancellationToken token)
         {
-            if(userId != chatDto.CreatorId)
+            if (userId != chatDto.CreatorId)
             {
                 throw new ApiException("Invalid operation", ExceptionStatus.BadRequest);
             }
@@ -40,7 +40,7 @@ namespace Application.Services
         {
             var chat = await _chatRepository.GetByIdAsync(id);
 
-            if(chat.CreatorId!= userId)
+            if (chat.CreatorId != userId)
             {
                 throw new ApiException("Invalid operation", ExceptionStatus.BadRequest);
             }
@@ -52,7 +52,7 @@ namespace Application.Services
 
         public async Task<List<ChatDto>> GetAllAsync(int userId, int offset, int limit, CancellationToken token)
         {
-            return _mapper.Map<List<ChatDto>>(await _chatRepository.GetAllAsync(userId,offset,limit));
+            return _mapper.Map<List<ChatDto>>(await _chatRepository.GetAllAsync(userId, offset, limit));
         }
 
         public async Task<ChatDto> GetByIdAsync(int userId, int id, CancellationToken token)

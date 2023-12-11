@@ -1,7 +1,6 @@
 ﻿using Application.Exceptions;
-using Microsoft.AspNetCore.Http;
-using Newtonsoft.Json;
 using FluentValidation;
+using Newtonsoft.Json;
 
 namespace WebApi.Middlewares
 {

@@ -4,7 +4,7 @@ using System.Reflection;
 
 namespace Infrastructure.Data
 {
-    public class DatabaseContext: DbContext
+    public class DatabaseContext : DbContext
     {
         public DbSet<Chat> Chats { get; set; }
         public DbSet<ChatMessage> ChatMessages { get; set; }
@@ -20,7 +20,7 @@ namespace Infrastructure.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-            modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());     
+            modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
         }
     }
 }

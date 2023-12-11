@@ -23,10 +23,10 @@ namespace Application.Services
 
             if (userId != creatorId)
             {
-               throw new ApiException("Invalid operation", ExceptionStatus.BadRequest);
+                throw new ApiException("Invalid operation", ExceptionStatus.BadRequest);
             }
 
-            await _userChatRepository.CreateAsync(new ChatUser() {ChatId = userChatDto.ChatId,UserId = userChatDto.UserId, JoinTime = DateTime.Now });
+            await _userChatRepository.CreateAsync(new ChatUser() { ChatId = userChatDto.ChatId, UserId = userChatDto.UserId, JoinTime = DateTime.Now });
             token.ThrowIfCancellationRequested();
             await _userChatRepository.SaveChangesAsync();
         }
@@ -44,5 +44,5 @@ namespace Application.Services
             token.ThrowIfCancellationRequested();
             await _userChatRepository.SaveChangesAsync();
         }
-    }   
+    }
 }
