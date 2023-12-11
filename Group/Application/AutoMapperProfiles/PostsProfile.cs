@@ -8,7 +8,7 @@ namespace Application.AutoMapperProfiles
     {
         public PostsProfile()
         {
-            CreateMap<PostDto, Post>();
+            CreateMap<PostDto, Post>().ForMember(x => x.Photos, opt => opt.Ignore());
         }
     }
 }
