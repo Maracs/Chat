@@ -35,7 +35,7 @@ namespace WebApi.Controllers
             return NoContent();
         }
 
-        [HttpDelete("{groupId}/{id}")]
+        [HttpDelete("{groupId}/posts/{id}")]
         public async Task<ActionResult> DeleteAsync([FromRoute] int groupId, [FromRoute] int id, CancellationToken token)
         {
             var userId = User.GetUserId();
@@ -44,7 +44,7 @@ namespace WebApi.Controllers
             return NoContent();
         }
 
-        [HttpPut("{groupId}/{id}")]
+        [HttpPut("{groupId}/posts/{id}")]
         public async Task<ActionResult> UpdateAsync([FromRoute] int groupId, [FromRoute] int id, [FromBody] string content, CancellationToken token)
         {
             var userId = User.GetUserId();

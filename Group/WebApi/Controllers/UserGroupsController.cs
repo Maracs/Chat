@@ -27,7 +27,7 @@ namespace WebApi.Controllers
             return NoContent();
         }
 
-        [HttpPost("request")]
+        [HttpPost("requests")]
         public async Task<ActionResult> RequestAsync([FromBody] UserGroupDto userGroupDto, CancellationToken token)
         {
             var userId = User.GetUserId();
