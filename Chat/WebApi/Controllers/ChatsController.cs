@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace WebApi.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/chats")]
     [ApiController]
     [Authorize]
     public class ChatsController : ControllerBase
