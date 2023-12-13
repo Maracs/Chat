@@ -7,7 +7,7 @@ using Newtonsoft.Json.Linq;
 
 namespace WebApi.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/groups")]
     [ApiController]
     [Authorize]
     public class GroupsController : ControllerBase

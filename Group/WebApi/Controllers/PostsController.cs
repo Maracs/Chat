@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace WebApi.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/groups")]
     [ApiController]
     [Authorize]
     public class PostsController : ControllerBase
@@ -18,7 +18,7 @@ namespace WebApi.Controllers
             _postService = postService;
         }
 
-        [HttpGet("{groupId}")]
+        [HttpGet("{groupId}/posts")]
         public async Task<ActionResult<List<PostDto>>> GetAllAsync(CancellationToken token, [FromRoute] int groupId, [FromQuery] int offset = 0, [FromQuery] int limit = 100)
         {
             var userId = User.GetUserId();
@@ -26,7 +26,7 @@ namespace WebApi.Controllers
             return Ok(await _postService.GetAllAsync(userId, groupId, offset, limit, token));
         }
 
-        [HttpPost("{groupId}")]
+        [HttpPost("{groupId}/posts")]
         public async Task<ActionResult> SendAsync([FromBody] PostDto postDto, CancellationToken token)
         {
             var userId = User.GetUserId();
