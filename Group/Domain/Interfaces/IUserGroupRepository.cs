@@ -10,6 +10,6 @@ namespace Domain.Interfaces
 
         Task RequestAsync(JoinRequest joinRequest);
 
-        Task SaveChangesAsync();
+        Task SaveChangesAsync(CancellationToken token);
     }
 }

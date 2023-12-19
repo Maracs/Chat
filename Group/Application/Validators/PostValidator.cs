@@ -8,7 +8,9 @@ namespace Application.Validators
         public MessageValidator()
         {
             RuleFor(dto => dto.Content).NotEmpty();
+
             RuleFor(dto => dto.SendTime).NotEmpty();
+
             RuleFor(dto => dto.GroupId).NotEmpty();
         }
     }

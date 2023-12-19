@@ -8,6 +8,7 @@ namespace Application.Validators
         public UserChatValidator()
         {
             RuleFor(dto => dto.UserId).NotEmpty();
+
             RuleFor(dto => dto.GroupId).NotEmpty();
         }
     }

@@ -22,13 +22,13 @@ namespace Infrastructure.Repositories
             _databaseContext.Remove(photos);
         }
 
-        public Task<List<Post>> GetAllAsync(int userId, int groupId, int offset, int limit)
+        public Task<List<Post>> GetAllAsync(int userId, int groupId, int offset, int limit, CancellationToken token)
         {
             return _databaseContext.Posts.Include(post => post.Photos)
                 .Where(post => post.GroupId == groupId)
                 .Skip(offset)
                 .Take(limit)
-                .ToListAsync();
+                .ToListAsync(token);
         }
 
         public Task<Post> GetByIdAsync(int groupId, int id)
@@ -36,22 +36,17 @@ namespace Infrastructure.Repositories
             return _databaseContext.Posts.Include(post => post.Photos).Where(post => post.GroupId == groupId && post.Id == id).SingleAsync();
         }
 
-        public async Task SaveChangesAsync()
+        public async Task SaveChangesAsync(CancellationToken token)
         {
-            await _databaseContext.SaveChangesAsync();
+            await _databaseContext.SaveChangesAsync(token);
         }
 
-        public async Task SendAsync(Post post, List<string> photos)
+        public async Task SendAsync(Post post, List<string> photoSrcs)
         {
             await _databaseContext.Posts.AddAsync(post);
             await _databaseContext.SaveChangesAsync();
-
-            foreach(var photoSrc in photos)
-            {
-                var photo = new Photo() { PostId = post.Id,Src=photoSrc}; 
-                await _databaseContext.Photos.AddAsync(photo);
-            }
-
+            var photos = photoSrcs.Select(photoSrc => new Photo() { PostId = post.Id, Src = photoSrc });
+            await _databaseContext.Photos.AddRangeAsync(photos);
             await _databaseContext.SaveChangesAsync();
            
         }

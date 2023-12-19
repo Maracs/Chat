@@ -31,9 +31,9 @@ namespace Infrastructure.Repositories
             await _databaseContext.JoinRequests.AddAsync(joinRequest);
         }
 
-        public async Task SaveChangesAsync()
+        public async Task SaveChangesAsync(CancellationToken token)
         {
-            await _databaseContext.SaveChangesAsync();
+            await _databaseContext.SaveChangesAsync(token);
         }
     }
 }

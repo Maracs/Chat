@@ -19,7 +19,14 @@ namespace Application.Services
 
         public async Task AddAsync(int userId, UserGroupDto userGroupDto, CancellationToken token)
         {
-            var creatorId = (await _groupRepository.GetByIdAsync(userGroupDto.GroupId)).CreatorId;
+            var group = await _groupRepository.GetByIdAsync(userGroupDto.GroupId,token);
+
+            if (group is null)
+            {
+                throw new ApiException("Invalid operation", ExceptionStatus.BadRequest);
+            }
+
+            var creatorId = group.CreatorId;
 
             if (userId != creatorId)
             {
@@ -27,13 +34,19 @@ namespace Application.Services
             }
 
             await _userGroupRepository.AddAsync(new GroupUser() { GroupId = userGroupDto.GroupId, UserId = userGroupDto.UserId, JoinTime = DateTime.Now });
-            token.ThrowIfCancellationRequested();
-            await _userGroupRepository.SaveChangesAsync();
+            await _userGroupRepository.SaveChangesAsync(token);
         }
 
         public async Task DeleteAsync(int userId, UserGroupDto userGroupDto, CancellationToken token)
         {
-            var creatorId = (await _groupRepository.GetByIdAsync(userGroupDto.GroupId)).CreatorId;
+            var group = await _groupRepository.GetByIdAsync(userGroupDto.GroupId,token);
+
+            if (group is null)
+            {
+                throw new ApiException("Invalid operation", ExceptionStatus.BadRequest);
+            }
+
+            var creatorId = group.CreatorId;
 
             if (userId != creatorId)
             {
@@ -41,13 +54,19 @@ namespace Application.Services
             }
 
             _userGroupRepository.Delete(new GroupUser() { GroupId = userGroupDto.GroupId, UserId = userGroupDto.UserId });
-            token.ThrowIfCancellationRequested();
-            await _userGroupRepository.SaveChangesAsync();
+            await _userGroupRepository.SaveChangesAsync(token);
         }
 
         public async Task RequestAsync(int userId, UserGroupDto userGroupDto, CancellationToken token)
         {
-            var creatorId = (await _groupRepository.GetByIdAsync(userGroupDto.GroupId)).CreatorId;
+            var group = await _groupRepository.GetByIdAsync(userGroupDto.GroupId,token);
+
+            if (group is null)
+            {
+                throw new ApiException("Invalid operation", ExceptionStatus.BadRequest);
+            }
+
+            var creatorId = group.CreatorId;
 
             if (userId != creatorId)
             {
@@ -55,8 +74,7 @@ namespace Application.Services
             }
 
             await _userGroupRepository.RequestAsync(new JoinRequest() { GroupId = userGroupDto.GroupId, UserId = userGroupDto.UserId});
-            token.ThrowIfCancellationRequested();
-            await _userGroupRepository.SaveChangesAsync();
+            await _userGroupRepository.SaveChangesAsync(token);
         }
     }
 }

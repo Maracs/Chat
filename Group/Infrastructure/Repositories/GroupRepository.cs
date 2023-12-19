@@ -26,7 +26,7 @@ namespace Infrastructure.Repositories
             _databaseContext.Groups.Remove(group);
         }
 
-        public async Task<List<Group>> GetAllAsync(int userId, int offset, int limit)
+        public async Task<List<Group>> GetAllAsync(int userId, int offset, int limit, CancellationToken token)
         {
             var chats = await _databaseContext.Groups
                 .Include(group => group.Users)
@@ -35,12 +35,12 @@ namespace Infrastructure.Repositories
                 .Take(limit)
                 .Include(group => group.Posts)
                     .ThenInclude(posts => posts.Photos)
-                .AsNoTracking().ToListAsync();
+                .AsNoTracking().ToListAsync(token);
 
             return chats;
         }
 
-        public async Task<Group> GetByIdAsync(int id)
+        public async Task<Group> GetByIdAsync(int id, CancellationToken token)
         {
             return await _databaseContext.Groups
                 .Include(group => group.Users)
@@ -48,12 +48,13 @@ namespace Infrastructure.Repositories
                     .ThenInclude(posts => posts.Photos)
                 .AsNoTracking()
                 .Where(group => group.Id == id)
-                .SingleAsync();
+                .SingleAsync(token);
         }
 
-        public async Task SaveChangesAsync()
+        public async Task SaveChangesAsync(CancellationToken token)
         {
-            await _databaseContext.SaveChangesAsync();
+
+            await _databaseContext.SaveChangesAsync(token);
         }
 
         public void Update(Group group)

@@ -9,9 +9,9 @@ namespace Domain.Interfaces
 {
     public interface IGroupRepository
     {
-        Task<Group> GetByIdAsync(int id);
+        Task<Group> GetByIdAsync(int id, CancellationToken token);
 
-        Task<List<Group>> GetAllAsync(int userId, int offset, int limit);
+        Task<List<Group>> GetAllAsync(int userId, int offset, int limit, CancellationToken token);
 
         Task CreateAsync(Group group);
 
@@ -19,6 +19,6 @@ namespace Domain.Interfaces
 
         void Update(Group group);
 
-        Task SaveChangesAsync();
+        Task SaveChangesAsync(CancellationToken token);
     }
 }

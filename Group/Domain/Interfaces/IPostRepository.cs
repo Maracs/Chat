@@ -12,7 +12,7 @@ namespace Domain.Interfaces
      
         Task<Post> GetByIdAsync(int chatId, int id);
 
-        Task<List<Post>> GetAllAsync(int userId, int chatId, int offset, int limit);
+        Task<List<Post>> GetAllAsync(int userId, int chatId, int offset, int limit, CancellationToken token);
 
         Task SendAsync(Post post,List<string> photos);
 
@@ -20,6 +20,6 @@ namespace Domain.Interfaces
 
         void Update(Post post);
 
-        Task SaveChangesAsync();
+        Task SaveChangesAsync(CancellationToken token);
     }
 }

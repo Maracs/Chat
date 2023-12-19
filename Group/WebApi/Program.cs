@@ -19,14 +19,7 @@ namespace WebApi
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
-            builder.Services.AddDbContext<DatabaseContext>(options =>
-            {
-
-                options.UseSqlServer(
-                    builder.Configuration.GetConnectionString("Default"),
-                    builder => builder.MigrationsAssembly("Infrastructure"));
-                options.LogTo(Console.WriteLine);
-            });
+            builder.Services.ConfigureDataBase(builder.Configuration);
             builder.Services.AddHttpContextAccessor();
             builder.Services.AddScoped(typeof(CancellationToken), serviceProvider =>
             {
