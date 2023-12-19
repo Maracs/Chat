@@ -9,6 +9,8 @@ using DataAccessLayer.Repositories;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.EntityFrameworkCore;
+using DotNetEnv;
+using DotNetEnv.Configuration;
 
 namespace PresentationLayer
 {
@@ -18,12 +20,15 @@ namespace PresentationLayer
         {
             var builder = WebApplication.CreateBuilder(args);
 
+            Env.Load();
+            var connectionString = builder.Configuration.GetConfiguredConnectionString();
+
             // Add services to the container.
             builder.Services.AddDbContext<DatabaseContext>(options =>
             {
 
                 options.UseSqlServer(
-                    builder.Configuration.GetConnectionString("Default"),
+                    connectionString,
                     builder => builder.MigrationsAssembly("Modsenfy.DataAccessLayer"));
                 options.LogTo(Console.WriteLine);
             });

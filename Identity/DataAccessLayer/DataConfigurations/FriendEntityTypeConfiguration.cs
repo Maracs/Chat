@@ -1,12 +1,6 @@
 ﻿using DataAccessLayer.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection.Emit;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DataAccessLayer.DataConfigurations
 {
@@ -18,10 +12,10 @@ namespace DataAccessLayer.DataConfigurations
             .HasKey(friend => new { friend.UserId, friend.UserFriendId });
 
             builder
-            .HasOne(f => f.User)
+            .HasOne(f => f.UserFriend)
             .WithMany()
-            .HasForeignKey(f => f.UserId)
-            .OnDelete(DeleteBehavior.Cascade);
+            .HasForeignKey(f => f.UserFriendId)
+            .OnDelete(DeleteBehavior.NoAction);
         }
     }
 }

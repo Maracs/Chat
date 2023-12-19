@@ -8,6 +8,9 @@ using Infrastructure.Repositories;
 using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using System.Text.RegularExpressions;
+using DotNetEnv;
+using DotNetEnv.Configuration;
 
 namespace WebApi
 {
@@ -15,10 +18,15 @@ namespace WebApi
     {
         public static void ConfigureDataBase(this IServiceCollection services,ConfigurationManager configuration)
         {
+
+            Env.Load();
+
+            var connectionString = configuration.GetConfiguredConnectionString();
+
             services.AddDbContext<DatabaseContext>(options =>
              {
                  options.UseSqlServer(
-                     configuration.GetConnectionString("Default"),
+                     connectionString,
                      builder => builder.MigrationsAssembly("Infrastructure"));
                  options.LogTo(Console.WriteLine);
              });
@@ -42,6 +50,33 @@ namespace WebApi
         {
             services.AddFluentValidationAutoValidation();
             services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
+        }
+
+        public static string GetConfiguredConnectionString(this IConfiguration configuration, string variant="Default")
+        {
+            var connectionString = configuration.GetConnectionString(variant);
+
+            if (string.IsNullOrEmpty(connectionString))
+            {
+                throw new ArgumentException("There is no such variant of connection string");
+            }
+
+            var matches = Regex.Matches(connectionString, @"\$\{\w+\}");
+
+            foreach (Match match in matches)
+            {
+                var arg = match.Value;
+                var envVariable = Environment.GetEnvironmentVariable(arg[2..^1]);
+
+                if (envVariable is null)
+                {
+                    throw new ArgumentException($"There is no environment variable {arg[2..^1]}");
+                }
+
+                connectionString = connectionString.Replace(arg, envVariable);
+            }
+
+            return connectionString;
         }
     }
 }

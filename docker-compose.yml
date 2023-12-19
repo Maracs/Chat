@@ -1,0 +1,47 @@
+version: "3.7"
+
+services:
+  chat:
+    container_name: chat-service
+    build:      
+      context: ./Chat
+      dockerfile: "Dockerfile"    
+    depends_on:
+      - mssql    
+    ports:
+      - "5001:80"
+  
+  group:
+   container_name: group-service
+   build:
+     context: ./Group
+     dockerfile: "Dockerfile"
+   depends_on:
+     - mssql
+   ports:
+     - "5002:80"
+
+  identity:
+   container_name: identity-service
+   build:
+     context: ./Identity
+     dockerfile: "Dockerfile"
+   depends_on:
+     - mssql
+   ports:
+     - "5003:80"
+
+  mssql:
+    container_name: mssql
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    ports:
+      - 1433:1433
+    environment:
+      ACCEPT_EULA: Y
+      MSSQL_PID: Express
+      SA_PASSWORD: ${SA_PASSWORD}
+    volumes:
+      - mssql_data:/var/opt/mssql
+
+volumes:
+  mssql_data:

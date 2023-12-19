@@ -3,6 +3,8 @@ using Application.Extentions;
 using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using WebApi.Extentions;
+using DotNetEnv;
+using DotNetEnv.Configuration;
 
 namespace WebApi
 {
@@ -11,11 +13,12 @@ namespace WebApi
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+            Env.Load();
+            var connectionString = builder.Configuration.GetConfiguredConnectionString();
             builder.Services.AddDbContext<DatabaseContext>(options =>
             {
-
                 options.UseSqlServer(
-                    builder.Configuration.GetConnectionString("Default"),
+                    connectionString,
                     builder => builder.MigrationsAssembly("Infrastructure"));
                 options.LogTo(Console.WriteLine);
             });
