@@ -8,6 +8,7 @@ namespace Domain.Interfaces
 
         Task CreateAsync(ChatUser userChat);
 
+        void DeleteUserFromChats(int id);
         Task SaveChangesAsync();
     }
 }

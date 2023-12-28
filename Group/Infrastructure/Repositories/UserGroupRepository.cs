@@ -31,6 +31,12 @@ namespace Infrastructure.Repositories
             await _databaseContext.JoinRequests.AddAsync(joinRequest);
         }
 
+        public void DeleteUserFromGroups(int userId)
+        {
+            var groupUsers = _databaseContext.GroupUsers.Where(groupUser => groupUser.UserId == userId);
+            _databaseContext.GroupUsers.RemoveRange(groupUsers);
+        }
+
         public async Task SaveChangesAsync(CancellationToken token)
         {
             await _databaseContext.SaveChangesAsync(token);

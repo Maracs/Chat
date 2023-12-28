@@ -11,5 +11,7 @@ namespace Domain.Interfaces
         Task RequestAsync(JoinRequest joinRequest);
 
         Task SaveChangesAsync(CancellationToken token);
+
+        public void DeleteUserFromGroups(int userId);
     }
 }

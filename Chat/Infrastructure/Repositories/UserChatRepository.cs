@@ -24,6 +24,12 @@ namespace Infrastructure.Repositories
             _databaseContext.ChatUsers.Remove(userChat);
         }
 
+        public void DeleteUserFromChats(int id)
+        {
+            var userChats = _databaseContext.ChatUsers.Where(userChat => userChat.UserId == id);
+            _databaseContext.ChatUsers.RemoveRange(userChats);
+        }
+
         public async Task SaveChangesAsync()
         {
             await _databaseContext.SaveChangesAsync();
