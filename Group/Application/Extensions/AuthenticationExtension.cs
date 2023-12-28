@@ -7,7 +7,7 @@ using System.Text;
 
 namespace Application.Extentions
 {
-    public static class AuthenticationExtention
+    public static class AuthenticationExtension
     {
         public static IServiceCollection AddIdentityService(this IServiceCollection services,
             IConfiguration configuration)

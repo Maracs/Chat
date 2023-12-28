@@ -4,26 +4,30 @@ using BusinessLayer.Exceptions;
 using BusinessLayer.Interfaces;
 using DataAccessLayer.Entities;
 using DataAccessLayer.Repositories;
-
+using MassTransit;
+using Shared;
+using System.Linq.Expressions;
 
 namespace BusinessLayer.Services
 {
+    
     public class UsersService: IUsersService
     {
         private readonly UsersRepository _userRepository;
         private readonly RolesRepository _rolesRepository;
         private readonly ITokensService _tokenService;
-
+        private readonly IPublishEndpoint _publishEndpoint;
         private readonly IMapper _mapper;
 
 
         public UsersService(UsersRepository userRepository, ITokensService tokenService,
-            RolesRepository rolesRepository,IMapper mapper)
+            RolesRepository rolesRepository,IMapper mapper, IPublishEndpoint publishEndpoint)
         {
             _userRepository = userRepository;
             _tokenService = tokenService;
             _rolesRepository = rolesRepository;
             _mapper = mapper;
+            _publishEndpoint = publishEndpoint;
         }
 
 
@@ -143,6 +147,8 @@ namespace BusinessLayer.Services
         public async Task DeleteUserAsync(int id)
         {
             await _userRepository.DeleteUserAsync(id);
+            await _publishEndpoint.Publish(new UserIdForGroupDto {UserId = id });
+            await _publishEndpoint.Publish(new UserIdForChatDto { UserId = id });
         }
 
 
