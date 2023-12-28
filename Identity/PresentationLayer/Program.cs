@@ -21,7 +21,7 @@ namespace PresentationLayer
             var builder = WebApplication.CreateBuilder(args);
 
             Env.Load();
-            var connectionString = builder.Configuration.GetConfiguredConnectionString();
+            var connectionString = builder.Configuration.GetConfiguredConnectionString("Local");
 
             // Add services to the container.
             builder.Services.AddDbContext<DatabaseContext>(options =>

@@ -21,7 +21,7 @@ namespace WebApi
 
             Env.Load();
 
-            var connectionString = configuration.GetConfiguredConnectionString();
+            var connectionString = configuration.GetConfiguredConnectionString("Local");
 
             services.AddDbContext<DatabaseContext>(options =>
              {
