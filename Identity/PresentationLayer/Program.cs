@@ -1,5 +1,6 @@
 using BusinessLayer.AutoMapperProfiles;
 using BusinessLayer.DTOs;
+using BusinessLayer.Extensions;
 using BusinessLayer.Extentions;
 using BusinessLayer.Interfaces;
 using BusinessLayer.Services;
@@ -63,6 +64,7 @@ namespace PresentationLayer
 
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+            builder.Services.ConfigureMassTransit(builder.Configuration);
 
             var app = builder.Build();
 
