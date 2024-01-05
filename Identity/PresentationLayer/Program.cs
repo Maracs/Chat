@@ -21,7 +21,7 @@ namespace PresentationLayer
             var builder = WebApplication.CreateBuilder(args);
 
             Env.Load();
-            var connectionString = builder.Configuration.GetConfiguredConnectionString("Local");
+            var connectionString = builder.Configuration.GetConnectionString("Default");
 
             // Add services to the container.
             builder.Services.AddDbContext<DatabaseContext>(options =>
@@ -29,7 +29,7 @@ namespace PresentationLayer
 
                 options.UseSqlServer(
                     connectionString,
-                    builder => builder.MigrationsAssembly("Modsenfy.DataAccessLayer"));
+                    builder => builder.MigrationsAssembly("DataAccessLayer"));
                 options.LogTo(Console.WriteLine);
             });
 
@@ -72,13 +72,13 @@ namespace PresentationLayer
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
-            if (app.Environment.IsDevelopment())
+            if (app.Environment.IsDevelopment() || app.Environment.EnvironmentName=="Docker")
             {
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
 
-            app.UseExceptionHandlerMiddleware();
+            //app.UseExceptionHandlerMiddleware();
 
             app.UseAuthentication();
             app.UseAuthorization();
