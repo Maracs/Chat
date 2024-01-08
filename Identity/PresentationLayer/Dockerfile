@@ -2,11 +2,15 @@
 
 FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS base
 WORKDIR /app
-EXPOSE 80
+EXPOSE 5001
+
+ENV ASPNETCORE_ENVIRONMENT=Docker
 
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
 COPY ["PresentationLayer/PresentationLayer.csproj", "PresentationLayer/"]
+COPY ["BusinessLayer/BusinessLayer.csproj", "BusinessLayer/"]
+COPY ["DataAccessLayer/DataAccessLayer.csproj", "DataAccessLayer/"]
 RUN dotnet restore "PresentationLayer/PresentationLayer.csproj"
 COPY . .
 WORKDIR "/src/PresentationLayer"

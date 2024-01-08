@@ -7,7 +7,8 @@ using Domain.Interfaces;
 using Infrastructure.Repositories;
 using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
+using DotNetEnv;
+
 
 namespace WebApi
 {
@@ -15,10 +16,15 @@ namespace WebApi
     {
         public static void ConfigureDataBase(this IServiceCollection services,ConfigurationManager configuration)
         {
+
+            Env.Load();
+
+            var connectionString = configuration.GetConnectionString("Default");
+
             services.AddDbContext<DatabaseContext>(options =>
              {
                  options.UseSqlServer(
-                     configuration.GetConnectionString("Default"),
+                     connectionString,
                      builder => builder.MigrationsAssembly("Infrastructure"));
                  options.LogTo(Console.WriteLine);
              });

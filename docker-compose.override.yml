@@ -1,0 +1,33 @@
+version: "3.9"
+
+services:
+  chat:
+    depends_on:
+      - mssql    
+    ports:
+      - "5002:80"
+  
+  group:
+   depends_on:
+     - mssql
+   ports:
+     - "5003:80"
+
+  identity:
+   depends_on:
+     - mssql
+   ports:
+     - "5001:80"
+
+  mssql:
+    ports:
+      - 1433:1433
+    environment:
+      ACCEPT_EULA: Y
+      MSSQL_PID: Express
+      SA_PASSWORD: ${SA_PASSWORD}
+    volumes:
+      - mssql_data:/var/opt/mssql
+
+volumes:
+  mssql_data:

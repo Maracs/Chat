@@ -5,6 +5,7 @@ using FluentValidation;
 using FluentValidation.AspNetCore;
 using Infrastructure.Repositories;
 using System.Reflection;
+using System.Text.RegularExpressions;
 
 namespace WebApi
 {
