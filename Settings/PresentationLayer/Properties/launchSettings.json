@@ -1,6 +1,6 @@
 {
   "profiles": {
-    "Settings": {
+    "PresentationLayer": {
       "commandName": "Project",
       "launchBrowser": true,
       "launchUrl": "swagger",
