@@ -2,7 +2,7 @@
 
 namespace Application.Extentions
 {
-    public static class ClaimsPrincipalExtention
+    public static class ClaimsPrincipalExtension
     {
         public static int GetUserId(this ClaimsPrincipal user)
         {

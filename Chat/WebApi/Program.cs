@@ -1,4 +1,5 @@
 using Application.AutoMapperProfiles;
+using Application.Extensions;
 using Application.Extentions;
 using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
@@ -37,6 +38,7 @@ namespace WebApi
             builder.Services.ConfigureValidation();
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+            builder.Services.ConfigureMassTransit(builder.Configuration);
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.

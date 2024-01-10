@@ -1,16 +1,7 @@
-using Application.Dtos;
 using Application.Extentions;
-using Application.Ports.Services;
-using Application.Services;
-using Application.Validators;
-using Domain.Interfaces;
-using FluentValidation;
-using Infrastructure.Data;
-using Infrastructure.Repositories;
-using Microsoft.EntityFrameworkCore;
-using FluentValidation.AspNetCore;
 using Application.AutoMapperProfiles;
 using WebApi.Extentions;
+using Application.Extensions;
 
 namespace WebApi
 {
@@ -35,6 +26,7 @@ namespace WebApi
             builder.Services.ConfigureValidation();
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+            builder.Services.ConfigureMassTransit(builder.Configuration);
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
