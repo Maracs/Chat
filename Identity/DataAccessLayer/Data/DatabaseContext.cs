@@ -7,7 +7,10 @@ namespace DataAccessLayer.Data
     public class DatabaseContext:DbContext
     {
         public DatabaseContext(DbContextOptions<DatabaseContext> options)
-            : base(options) { }
+            : base(options) 
+        {
+             Database.EnsureCreated();
+        }
 
         public DbSet<Blocked> Blockeds { get; set; }
 

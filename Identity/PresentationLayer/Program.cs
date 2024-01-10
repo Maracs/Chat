@@ -10,6 +10,8 @@ using DataAccessLayer.Repositories;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.EntityFrameworkCore;
+using DotNetEnv;
+using DotNetEnv.Configuration;
 
 namespace PresentationLayer
 {
@@ -19,13 +21,16 @@ namespace PresentationLayer
         {
             var builder = WebApplication.CreateBuilder(args);
 
+            Env.Load();
+            var connectionString = builder.Configuration.GetConnectionString("Default");
+
             // Add services to the container.
             builder.Services.AddDbContext<DatabaseContext>(options =>
             {
 
                 options.UseSqlServer(
-                    builder.Configuration.GetConnectionString("Default"),
-                    builder => builder.MigrationsAssembly("Modsenfy.DataAccessLayer"));
+                    connectionString,
+                    builder => builder.MigrationsAssembly("DataAccessLayer"));
                 options.LogTo(Console.WriteLine);
             });
 
@@ -69,13 +74,13 @@ namespace PresentationLayer
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
-            if (app.Environment.IsDevelopment())
+            if (app.Environment.IsDevelopment() || app.Environment.EnvironmentName=="Docker")
             {
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
 
-            app.UseExceptionHandlerMiddleware();
+            //app.UseExceptionHandlerMiddleware();
 
             app.UseAuthentication();
             app.UseAuthorization();
