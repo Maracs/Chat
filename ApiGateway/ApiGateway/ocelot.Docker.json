@@ -6,10 +6,23 @@
       "DownstreamHostAndPorts": [
         {
           "Host": "localhost",
+          "Port": 7202
+        }
+      ],
+      "UpstreamPathTemplate": "/api/settings-service/{everything}",
+      "UpstreamHttpMethod": [ "Post", "Get", "Delete", "Put" ],
+      "SwaggerKey": "settings"
+    },
+    {
+      "DownstreamPathTemplate": "/api/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
           "Port": 5001
         }
       ],
-      "UpstreamPathTemplate": "/api/identity/{everything}",
+      "UpstreamPathTemplate": "/api/identity-service/{everything}",
       "UpstreamHttpMethod": [ "Post", "Get", "Delete", "Put" ],
       "SwaggerKey": "identity"
     },
@@ -22,7 +35,7 @@
           "Port": 5002
         }
       ],
-      "UpstreamPathTemplate": "/api/chat/{everything}",
+      "UpstreamPathTemplate": "/api/chat-service/{everything}",
       "UpstreamHttpMethod": [ "Post", "Get", "Delete", "Put" ],
       "SwaggerKey": "chat"
     },
@@ -35,13 +48,23 @@
           "Port": 5003
         }
       ],
-      "UpstreamPathTemplate": "/api/group/{everything}",
+      "UpstreamPathTemplate": "/api/group-service/{everything}",
       "UpstreamHttpMethod": [ "Post", "Get", "Delete", "Put" ],
       "Priority": 0,
       "SwaggerKey": "group"
     }
   ],
   "SwaggerEndPoints": [
+    {
+      "Key": "settings",
+      "Config": [
+        {
+          "Name": "Settings API",
+          "Version": "v1",
+          "Url": "http://localhost:7202/swagger/v1/swagger.json"
+        }
+      ]
+    },
     {
       "Key": "identity",
       "Config": [
@@ -63,10 +86,10 @@
       ]
     },
     {
-      "Key": "Group",
+      "Key": "group",
       "Config": [
         {
-          "Name": "Reporthub API",
+          "Name": "Group API",
           "Version": "v1",
           "Url": "http://localhost:5003/swagger/v1/swagger.json"
         }

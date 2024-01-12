@@ -63,10 +63,10 @@
       ]
     },
     {
-      "Key": "Group",
+      "Key": "group",
       "Config": [
         {
-          "Name": "Reporthub API",
+          "Name": "Group API",
           "Version": "v1",
           "Url": "http://localhost:5003/swagger/v1/swagger.json"
         }
