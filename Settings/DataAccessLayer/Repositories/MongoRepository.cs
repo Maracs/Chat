@@ -89,11 +89,8 @@ namespace Shared.Repository.NoSql
         }
 
         public async Task CreateAsync(TEntity entity, CancellationToken cancellationToken = default)
-        {
-            if (!(await IsEntityExistsAsync(entity.Id, cancellationToken)))
-            {
+        {         
                 await _mongoCollection.InsertOneAsync(entity, cancellationToken: cancellationToken);
-            }
         }
 
         public async Task UpdateAsync(TEntity entity, CancellationToken cancellationToken = default)
