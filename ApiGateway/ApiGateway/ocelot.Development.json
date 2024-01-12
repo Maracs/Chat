@@ -6,6 +6,19 @@
       "DownstreamHostAndPorts": [
         {
           "Host": "localhost",
+          "Port": 7202
+        }
+      ],
+      "UpstreamPathTemplate": "/api/settings-service/{everything}",
+      "UpstreamHttpMethod": [ "Post", "Get", "Delete", "Put" ],
+      "SwaggerKey": "settings"
+    },
+    {
+      "DownstreamPathTemplate": "/api/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
           "Port": 5001
         }
       ],
@@ -42,6 +55,16 @@
     }
   ],
   "SwaggerEndPoints": [
+    {
+      "Key": "settings",
+      "Config": [
+        {
+          "Name": "Settings API",
+          "Version": "v1",
+          "Url": "http://localhost:7202/swagger/v1/swagger.json"
+        }
+      ]
+    },
     {
       "Key": "identity",
       "Config": [
