@@ -18,7 +18,6 @@ namespace BusinessLayer.Extentions
                  options.Listen(IPAddress.Any, httpPort, listenOptions =>
                  {
                      listenOptions.Protocols = HttpProtocols.Http1AndHttp2;
-                     listenOptions.UseHttps();
                  });
 
                  options.Listen(IPAddress.Any, grpcPort, listenOptions =>

@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
-using BusinessLayer.DTOs;
-using BusinessLayer.Interfaces;
 using DataAccessLayer.Repositories;
+using Shared;
 
 namespace BusinessLayer.Services
 {

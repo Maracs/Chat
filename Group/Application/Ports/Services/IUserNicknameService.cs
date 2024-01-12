@@ -1,4 +1,5 @@
-﻿using System.ServiceModel;
+﻿using Application.Dtos;
+using System.ServiceModel;
 
 namespace Shared
 {

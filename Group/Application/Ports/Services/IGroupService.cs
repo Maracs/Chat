@@ -4,7 +4,7 @@ namespace Application.Ports.Services
 {
     public interface IGroupService
     {
-        Task<GroupDto> GetByIdAsync(int userId, int id, CancellationToken token);
+        Task<GroupWithUserNicknameDto> GetByIdAsync(int userId, int id, CancellationToken token);
 
         Task<List<GroupDto>> GetAllAsync(int userId, int offset, int limit, CancellationToken token);
 

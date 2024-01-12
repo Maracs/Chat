@@ -4,6 +4,7 @@ using Application.Ports.Services;
 using AutoMapper;
 using Domain.Entities;
 using Domain.Interfaces;
+using Shared;
 using System;
 
 namespace Application.Services
@@ -12,11 +13,13 @@ namespace Application.Services
     {
         private readonly IGroupRepository _groupRepository;
         private readonly IMapper _mapper;
+        private readonly IUserNicknameService _userNicknameService;
 
-        public GroupService(IGroupRepository groupRepository, IMapper mapper)
+        public GroupService(IGroupRepository groupRepository, IMapper mapper, IUserNicknameService userNicknameService)
         {
             _groupRepository = groupRepository;
             _mapper = mapper;
+            _userNicknameService = userNicknameService;
         }
 
         public async Task CreateAsync(int userId, CreateGroupDto groupDto, CancellationToken token)
@@ -55,7 +58,7 @@ namespace Application.Services
             return _mapper.Map<List<GroupDto>>(await _groupRepository.GetAllAsync(userId, offset, limit, token));
         }
 
-        public async Task<GroupDto> GetByIdAsync(int userId, int id, CancellationToken token)
+        public async Task<GroupWithUserNicknameDto> GetByIdAsync(int userId, int id, CancellationToken token)
         {
             var group = await _groupRepository.GetByIdAsync(id,token);
 
@@ -69,7 +72,11 @@ namespace Application.Services
                 throw new ApiException("Invalid operation", ExceptionStatus.BadRequest);
             };
 
-            return _mapper.Map<GroupDto>(group);
+            var userNickname = await _userNicknameService.GetUserNicknameAsync(new UserIdDto() { Id = userId });
+            var groupDto = _mapper.Map<GroupWithUserNicknameDto>(group);
+            groupDto = _mapper.Map(userNickname, groupDto);
+
+            return groupDto;
         }
 
         public async Task UpdateAsync(int userId, int id, CreateGroupDto groupDto, CancellationToken token)
