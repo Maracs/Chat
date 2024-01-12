@@ -12,6 +12,10 @@ using FluentValidation.AspNetCore;
 using Microsoft.EntityFrameworkCore;
 using DotNetEnv;
 using DotNetEnv.Configuration;
+using Microsoft.AspNetCore.Server.Kestrel.Core;
+using System.Net;
+using Microsoft.Extensions.Configuration;
+using ProtoBuf.Grpc.Configuration;
 
 namespace PresentationLayer
 {
@@ -21,6 +25,7 @@ namespace PresentationLayer
         {
             var builder = WebApplication.CreateBuilder(args);
 
+            builder.ConfigureKestrel();
             Env.Load();
             var connectionString = builder.Configuration.GetConnectionString("Default");
 
@@ -70,8 +75,17 @@ namespace PresentationLayer
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
             builder.Services.ConfigureMassTransit(builder.Configuration);
+            builder.Services.ReristerRrpcService();
 
             var app = builder.Build();
+
+
+            app.UseCors();
+            app.UseRouting();
+            app.UseAuthentication();
+            app.UseAuthorization();
+            app.UseGrpcService();
+
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment() || app.Environment.EnvironmentName=="Docker")
@@ -80,7 +94,7 @@ namespace PresentationLayer
                 app.UseSwaggerUI();
             }
 
-            //app.UseExceptionHandlerMiddleware();
+            app.UseExceptionHandlerMiddleware();
 
             app.UseAuthentication();
             app.UseAuthorization();
