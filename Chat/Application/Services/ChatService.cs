@@ -4,6 +4,7 @@ using Application.Ports.Services;
 using AutoMapper;
 using Domain.Entities;
 using Domain.Interfaces;
+using Shared;
 
 namespace Application.Services
 {
@@ -11,11 +12,12 @@ namespace Application.Services
     {
         private readonly IChatRepository _chatRepository;
         private readonly IMapper _mapper;
-
-        public ChatService(IChatRepository chatRepository, IMapper mapper)
+        private readonly IUserNicknameService _userNicknameService;
+        public ChatService(IChatRepository chatRepository, IMapper mapper, IUserNicknameService userNicknameService)
         {
             _chatRepository = chatRepository;
             _mapper = mapper;
+            _userNicknameService = userNicknameService;
         }
 
         public async Task CreateAsync(int userId, CreateChatDto chatDto, CancellationToken token)
@@ -55,7 +57,7 @@ namespace Application.Services
             return _mapper.Map<List<ChatDto>>(await _chatRepository.GetAllAsync(userId, offset, limit));
         }
 
-        public async Task<ChatDto> GetByIdAsync(int userId, int id, CancellationToken token)
+        public async Task<ChatWithUserNicknameDto> GetByIdAsync(int userId, int id, CancellationToken token)
         {
             var chat = await _chatRepository.GetByIdAsync(id);
 
@@ -66,7 +68,11 @@ namespace Application.Services
 
             token.ThrowIfCancellationRequested();
 
-            return _mapper.Map<ChatDto>(chat);
+            var userNickname = await _userNicknameService.GetUserNicknameAsync(new UserIdDto() { Id = userId });
+            var chatDto = _mapper.Map<ChatWithUserNicknameDto>(chat);
+            chatDto = _mapper.Map(userNickname, chatDto);
+
+            return chatDto;
         }
 
         public async Task UpdateAsync(int userId, int id, CreateChatDto chatDto, CancellationToken token)

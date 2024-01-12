@@ -4,7 +4,7 @@ namespace Application.Ports.Services
 {
     public interface IChatService
     {
-        Task<ChatDto> GetByIdAsync(int userId, int id, CancellationToken token);
+        Task<ChatWithUserNicknameDto> GetByIdAsync(int userId, int id, CancellationToken token);
 
         Task<List<ChatDto>> GetAllAsync(int userId, int offset, int limit, CancellationToken token);
 

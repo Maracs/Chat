@@ -19,7 +19,7 @@ namespace WebApi.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<ChatDto>> GetByIdAsync([FromRoute] int id, CancellationToken token)
+        public async Task<ActionResult<ChatWithUserNicknameDto>> GetByIdAsync([FromRoute] int id, CancellationToken token)
         {
             var userId = User.GetUserId();
 
