@@ -25,6 +25,7 @@ namespace BusinessLayer.Services
             {
                 throw new ApiException("Invalid operation", ExceptionStatus.BadRequest);
             }
+
             var setting = _mapper.Map<SettingsInfo>(settingDto);
             setting.Id = userId.ToString();
             await _settingsRepository.CreateAsync(setting,token);
@@ -36,12 +37,14 @@ namespace BusinessLayer.Services
             {
                 throw new ApiException("Invalid operation", ExceptionStatus.BadRequest);
             }
+
             await _settingsRepository.DeleteAsync(id.ToString(), token);
         }
 
         public async Task<SettingDto> GetSettingAsync(int id, CancellationToken token)
         {
             var setting = await _settingsRepository.GetByIdAsync(id.ToString(),token);
+
             if (setting is null)
             {
                 throw new ApiException("Invalid operation", ExceptionStatus.BadRequest);
@@ -56,6 +59,7 @@ namespace BusinessLayer.Services
             {
                 throw new ApiException("Invalid operation", ExceptionStatus.BadRequest);
             }
+
             var setting = _mapper.Map<SettingsInfo>(settingDto);
             setting.Id = userId.ToString();
             await _settingsRepository.UpdateAsync(setting,token);
