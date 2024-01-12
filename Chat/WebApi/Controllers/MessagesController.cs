@@ -27,7 +27,7 @@ namespace WebApi.Controllers
             return NoContent();
         }
 
-        [HttpGet("{chatid}")]
+        [HttpGet("{chatid}/messages")]
         public async Task<ActionResult<List<MessageDto>>> GetAllAsync(CancellationToken token, [FromRoute] int chatid, [FromQuery] int offset = 0, [FromQuery] int limit = 100)
         {
             var userId = User.GetUserId();
@@ -35,7 +35,7 @@ namespace WebApi.Controllers
             return Ok(await _messageService.GetAllAsync(userId, chatid, offset, limit, token));
         }
 
-        [HttpPost("{chatid}")]
+        [HttpPost("{chatid}/messages")]
         public async Task<ActionResult> SendAsync([FromBody] MessageDto messageDto, CancellationToken token)
         {
             var userId = User.GetUserId();
