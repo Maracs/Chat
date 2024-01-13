@@ -12,6 +12,9 @@ using FluentValidation.AspNetCore;
 using Microsoft.EntityFrameworkCore;
 using DotNetEnv;
 using DotNetEnv.Configuration;
+using BusinessLayer.Middlewares;
+using BusinessLayer.AutoMapperProfiles.Resolvers;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace PresentationLayer
 {
@@ -46,7 +49,7 @@ namespace PresentationLayer
             builder.Services.AddScoped<RolesRepository>();
             builder.Services.AddScoped<StatusesRepository>();
             builder.Services.AddScoped<UsersRepository>();
-
+            builder.Services.AddUserRequestRepository(builder.Configuration);
 
             builder.Services.AddScoped<IBlockingsService, BlockingsService>();
             builder.Services.AddScoped<IFriendsService, FriendsService>();
@@ -66,6 +69,7 @@ namespace PresentationLayer
             builder.Services.AddScoped<IValidator<SignupDto>, SignupValidator>();
             builder.Services.AddScoped<IValidator<StatusDto>, StatusValidator>();
             builder.Services.AddScoped<IValidator<FullUserInfoWithoutIdDto>, UserValidator>();
+            
 
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
@@ -80,12 +84,12 @@ namespace PresentationLayer
                 app.UseSwaggerUI();
             }
 
-            //app.UseExceptionHandlerMiddleware();
 
             app.UseAuthentication();
             app.UseAuthorization();
 
-
+            //app.UseExceptionHandlerMiddleware();
+            app.UseMiddleware<UserCacheMiddleware>();
             app.MapControllers();
 
             app.Run();
