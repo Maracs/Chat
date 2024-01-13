@@ -2,6 +2,7 @@ using Application.Extentions;
 using Application.AutoMapperProfiles;
 using WebApi.Extentions;
 using Application.Extensions;
+using WebApi.Middlewares;
 
 namespace WebApi
 {
@@ -36,9 +37,10 @@ namespace WebApi
                 app.UseSwaggerUI();
             }
 
-            //app.UseExceptionHandlerMiddleware();
             app.UseAuthentication();
             app.UseAuthorization();
+            //app.UseExceptionHandlerMiddleware();
+            app.UseMiddleware<UserCacheMiddleware>(builder.Configuration["Redis:ConnectionString"]);
             app.MapControllers();
             app.Run();
         }
