@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using WebApi.Extentions;
 using DotNetEnv;
 using DotNetEnv.Configuration;
+using WebApi.Middlewares;
 
 namespace WebApi
 {
@@ -48,9 +49,10 @@ namespace WebApi
                 app.UseSwaggerUI();
             }
 
-            //app.UseExceptionHandlerMiddleware();
             app.UseAuthentication();
             app.UseAuthorization();
+            //app.UseExceptionHandlerMiddleware();
+            app.UseMiddleware<UserCacheMiddleware>(builder.Configuration["Redis:ConnectionString"]);
             app.MapControllers();
             app.Run();
         }
