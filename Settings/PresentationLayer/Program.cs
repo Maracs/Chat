@@ -1,6 +1,7 @@
 using BusinessLayer.AutoMapperProfile;
 using BusinessLayer.Contracts;
 using BusinessLayer.Extensions;
+using BusinessLayer.Middlewares;
 using BusinessLayer.Services;
 using DataAccessLayer.Extensions;
 using FluentValidation;
@@ -40,9 +41,10 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseExceptionHandlerMiddleware();
 app.UseAuthentication();
 app.UseAuthorization();
+app.UseExceptionHandlerMiddleware();
+app.UseMiddleware<UserCacheMiddleware>(builder.Configuration["Redis:ConnectionString"]);
 
 app.MapControllers();
 
