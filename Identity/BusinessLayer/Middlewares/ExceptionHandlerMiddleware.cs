@@ -2,6 +2,7 @@
 using BusinessLayer.Exceptions;
 using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
+using Microsoft.Extensions.Logging;
 
 namespace BusinessLayer.Middlewares
 {
@@ -9,9 +10,12 @@ namespace BusinessLayer.Middlewares
     {
         private RequestDelegate _next;
 
-        public ExceptionHandlerMiddleware(RequestDelegate next)
+        private ILogger<ExceptionHandlerMiddleware> _logger;
+
+        public ExceptionHandlerMiddleware(RequestDelegate next, ILogger<ExceptionHandlerMiddleware> logger)
         {
             _next = next;
+            _logger = logger;
         }
 
         public async Task Invoke(HttpContext context)
@@ -34,8 +38,10 @@ namespace BusinessLayer.Middlewares
             }
         }
 
-        private static async Task HandleApiExceptionMessageAsync(HttpContext context, ApiException exception)
+        private async Task HandleApiExceptionMessageAsync(HttpContext context, ApiException exception)
         {
+            _logger.LogWarning("Error occured: {ErrorMessage}", exception.Message);
+
             var result = JsonConvert.SerializeObject(new
             {
                 StatusCode = exception.StatusCode,
@@ -46,7 +52,7 @@ namespace BusinessLayer.Middlewares
             await context.Response.WriteAsync(result);
         }
 
-        private static async Task HandleInternalServerErrorAsync(HttpContext context)
+        private async Task HandleInternalServerErrorAsync(HttpContext context)
         {
             var result = JsonConvert.SerializeObject(new
             {
@@ -58,7 +64,7 @@ namespace BusinessLayer.Middlewares
             await context.Response.WriteAsync(result);
         }
 
-        private static async Task HandleValidationExceptionAsync(HttpContext context, ValidationException exception)
+        private async Task HandleValidationExceptionAsync(HttpContext context, ValidationException exception)
         {
             var message = exception.Errors.Select(err => err.ErrorMessage)
                 .Aggregate((a, c) => $"{a}{c}");
