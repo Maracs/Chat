@@ -28,7 +28,7 @@ builder.Services.AddSwaggerService();
 builder.Services.AddScoped<ISettingsService,SettingsService>();
 builder.Services.AddFluentValidationAutoValidation();
 builder.Services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
-
+builder.Services.ConfigureLogging(builder, Assembly.GetExecutingAssembly().GetName().Name!);
 
 
 var app = builder.Build();
