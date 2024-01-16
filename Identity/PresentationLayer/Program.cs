@@ -12,6 +12,7 @@ using FluentValidation.AspNetCore;
 using Microsoft.EntityFrameworkCore;
 using DotNetEnv;
 using DotNetEnv.Configuration;
+using System.Reflection;
 
 namespace PresentationLayer
 {
@@ -58,6 +59,8 @@ namespace PresentationLayer
             builder.Services.AddIdentityService(builder.Configuration);
             builder.Services.AddSwaggerService();
 
+            builder.Services.ConfigureLogging(builder,Assembly.GetExecutingAssembly().GetName().Name!);
+
             builder.Services.AddControllers();
 
             builder.Services.AddFluentValidationAutoValidation();
@@ -80,7 +83,7 @@ namespace PresentationLayer
                 app.UseSwaggerUI();
             }
 
-            //app.UseExceptionHandlerMiddleware();
+            app.UseExceptionHandlerMiddleware();
 
             app.UseAuthentication();
             app.UseAuthorization();

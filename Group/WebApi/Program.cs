@@ -2,6 +2,7 @@ using Application.Extentions;
 using Application.AutoMapperProfiles;
 using WebApi.Extentions;
 using Application.Extensions;
+using System.Reflection;
 
 namespace WebApi
 {
@@ -27,6 +28,8 @@ namespace WebApi
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
             builder.Services.ConfigureMassTransit(builder.Configuration);
+            builder.Services.ConfigureLogging(builder, Assembly.GetExecutingAssembly().GetName().Name!);
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -36,7 +39,7 @@ namespace WebApi
                 app.UseSwaggerUI();
             }
 
-            //app.UseExceptionHandlerMiddleware();
+            app.UseExceptionHandlerMiddleware();
             app.UseAuthentication();
             app.UseAuthorization();
             app.MapControllers();

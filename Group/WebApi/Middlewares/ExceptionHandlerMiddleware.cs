@@ -9,9 +9,12 @@ namespace WebApi.Middlewares
     {
         private RequestDelegate _next;
 
-        public ExceptionHandlerMiddleware(RequestDelegate next)
+        private readonly ILogger<ExceptionHandlerMiddleware> _logger;
+
+        public ExceptionHandlerMiddleware(RequestDelegate next, ILogger<ExceptionHandlerMiddleware> logger)
         {
             _next = next;
+            _logger = logger;
         }
 
         public async Task Invoke(HttpContext context)
@@ -34,8 +37,10 @@ namespace WebApi.Middlewares
             }
         }
 
-        private static async Task HandleApiExceptionMessageAsync(HttpContext context, ApiException exception)
+        private async Task HandleApiExceptionMessageAsync(HttpContext context, ApiException exception)
         {
+            _logger.LogWarning("Error occured: {ErrorMessage}", exception.Message);
+
             var result = JsonConvert.SerializeObject(new
             {
                 StatusCode = exception.StatusCode,
@@ -46,7 +51,7 @@ namespace WebApi.Middlewares
             await context.Response.WriteAsync(result);
         }
 
-        private static async Task HandleInternalServerErrorAsync(HttpContext context)
+        private async Task HandleInternalServerErrorAsync(HttpContext context)
         {
             var result = JsonConvert.SerializeObject(new
             {
@@ -58,7 +63,7 @@ namespace WebApi.Middlewares
             await context.Response.WriteAsync(result);
         }
 
-        private static async Task HandleValidationExceptionAsync(HttpContext context, ValidationException exception)
+        private async Task HandleValidationExceptionAsync(HttpContext context, ValidationException exception)
         {
             var message = exception.Errors.Select(err => err.ErrorMessage)
                 .Aggregate((a, c) => $"{a}{c}");
