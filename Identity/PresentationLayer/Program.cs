@@ -44,13 +44,11 @@ namespace PresentationLayer
             builder.Services.AddAutoMapper(typeof(StatusesProfile).Assembly);
             builder.Services.AddAutoMapper(typeof(UsersProfile).Assembly);
 
-
             builder.Services.AddScoped<BlockingsRepository>();
             builder.Services.AddScoped<FriendsRepository>();
             builder.Services.AddScoped<RolesRepository>();
             builder.Services.AddScoped<StatusesRepository>();
             builder.Services.AddScoped<UsersRepository>();
-
 
             builder.Services.AddScoped<IBlockingsService, BlockingsService>();
             builder.Services.AddScoped<IFriendsService, FriendsService>();

@@ -5,7 +5,6 @@ using BusinessLayer.Interfaces;
 using DataAccessLayer.Entities;
 using DataAccessLayer.Repositories;
 using MassTransit;
-using Shared;
 using System.Linq.Expressions;
 
 namespace BusinessLayer.Services
