@@ -39,7 +39,7 @@ namespace WebApi
                 app.UseSwaggerUI();
             }
 
-            //app.UseExceptionHandlerMiddleware();
+            app.UseExceptionHandlerMiddleware();
             app.UseAuthentication();
             app.UseAuthorization();
             app.MapControllers();

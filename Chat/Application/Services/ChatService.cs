@@ -4,7 +4,8 @@ using Application.Ports.Services;
 using AutoMapper;
 using Domain.Entities;
 using Domain.Interfaces;
-using Shared;
+using Grpc.Dtos;
+using Grpc.Interfaces;
 
 namespace Application.Services
 {

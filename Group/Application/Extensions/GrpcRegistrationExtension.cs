@@ -1,9 +1,9 @@
-﻿using Grpc.Net.Client;
+﻿using Application.Ports.Services;
+using Grpc.Interfaces;
+using Grpc.Net.Client;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using ProtoBuf.Grpc.Client;
-using Shared;
-
 
 namespace Application.Extensions
 {

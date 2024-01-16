@@ -1,6 +1,6 @@
 ﻿using System.Runtime.Serialization;
 
-namespace Shared
+namespace Grpc.DTOs
 {
     [DataContract]
     public class UserNicknameDto

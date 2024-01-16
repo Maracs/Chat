@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using DataAccessLayer.Repositories;
-using Shared;
+using Grpc.DTOs;
+using Grpc.Interfaces;
 
 namespace BusinessLayer.Services
 {

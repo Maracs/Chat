@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using BusinessLayer.DTOs;
 using DataAccessLayer.Entities;
-using Shared;
+using Grpc.DTOs;
 
 namespace BusinessLayer.AutoMapperProfiles
 {

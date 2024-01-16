@@ -1,7 +1,7 @@
-﻿using Application.Dtos;
+﻿using Grpc.Dtos;
 using System.ServiceModel;
 
-namespace Shared
+namespace Grpc.Interfaces
 {
     [ServiceContract]
     public interface IUserNicknameService

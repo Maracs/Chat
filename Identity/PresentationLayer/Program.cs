@@ -25,7 +25,6 @@ namespace PresentationLayer
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            builder.ConfigureKestrel();
             Env.Load();
             var connectionString = builder.Configuration.GetConnectionString("Default");
 
@@ -79,13 +78,11 @@ namespace PresentationLayer
 
             var app = builder.Build();
 
-
             app.UseCors();
             app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();
             app.UseGrpcService();
-
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment() || app.Environment.EnvironmentName=="Docker")
@@ -95,13 +92,9 @@ namespace PresentationLayer
             }
 
             app.UseExceptionHandlerMiddleware();
-
             app.UseAuthentication();
             app.UseAuthorization();
-
-
             app.MapControllers();
-
             app.Run();
         }
     }
