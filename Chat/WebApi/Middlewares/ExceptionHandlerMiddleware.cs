@@ -8,7 +8,7 @@ namespace WebApi.Middlewares
     {
         private RequestDelegate _next;
 
-        private ILogger<ExceptionHandlerMiddleware> _logger;
+        private readonly ILogger<ExceptionHandlerMiddleware> _logger;
 
         public ExceptionHandlerMiddleware(RequestDelegate next, ILogger<ExceptionHandlerMiddleware> logger)
         {

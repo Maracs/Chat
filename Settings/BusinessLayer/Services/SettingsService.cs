@@ -1,5 +1,4 @@
-﻿using Amazon.Runtime.Internal.Util;
-using AutoMapper;
+﻿using AutoMapper;
 using BusinessLayer.Contracts;
 using BusinessLayer.Dtos;
 using BusinessLayer.Exceptions;
@@ -26,7 +25,7 @@ namespace BusinessLayer.Services
         }
         public async Task AddSettingAsync(SettingDto settingDto,int userId, CancellationToken token)
         {
-            _logger.LogInformation("Trying to call AddSettingAsync.");
+            _logger.LogInformation("User with id {UserId} trying to Create Settigs.", userId);
 
             if (await _settingsRepository.IsEntityExistsAsync(userId.ToString(), token))
             {
@@ -37,12 +36,12 @@ namespace BusinessLayer.Services
             setting.Id = userId.ToString();
             await _settingsRepository.CreateAsync(setting,token);
 
-            _logger.LogInformation("AddSettingAsync was called successfully.");
+            _logger.LogInformation("User with id {UserId} successfully Create Settigs.", userId);
         }
 
         public async Task DeleteSettingAsync(int id, CancellationToken token)
         {
-            _logger.LogInformation("Trying to call DeleteSettingAsync.");
+            _logger.LogInformation("User with id {UserId} trying to Delete Settigs.", id);
 
             if (!(await _settingsRepository.IsEntityExistsAsync(id.ToString(),token)))
             {
@@ -51,12 +50,12 @@ namespace BusinessLayer.Services
 
             await _settingsRepository.DeleteAsync(id.ToString(), token);
 
-            _logger.LogInformation("DeleteSettingAsync was called successfully.");
+            _logger.LogInformation("User with id {UserId} successfully Delete Settigs.", id);
         }
 
         public async Task<SettingDto> GetSettingAsync(int id, CancellationToken token)
         {
-            _logger.LogInformation("Trying to call GetSettingAsync.");
+            _logger.LogInformation("User with id {UserId} trying to Get Settigs.", id);
 
             var setting = await _settingsRepository.GetByIdAsync(id.ToString(),token);
 
@@ -65,14 +64,14 @@ namespace BusinessLayer.Services
                 throw new ApiException("Invalid operation", ExceptionStatus.BadRequest);
             }
 
-            _logger.LogInformation("GetSettingAsync was called successfully.");
+            _logger.LogInformation("User with id {UserId} successfully Get Settigs.", id);
 
             return _mapper.Map<SettingDto>(setting);
         }
 
         public async Task UpdateSettingAsync(SettingDto settingDto, int userId, CancellationToken token)
         {
-            _logger.LogInformation("Trying to call UpdateSettingAsync.");
+            _logger.LogInformation("User with id {UserId} trying to Update Settigs.", userId);
 
             if (!(await _settingsRepository.IsEntityExistsAsync(userId.ToString(), token)))
             {
@@ -83,7 +82,7 @@ namespace BusinessLayer.Services
             setting.Id = userId.ToString();
             await _settingsRepository.UpdateAsync(setting,token);
 
-            _logger.LogInformation("UpdateSettingAsync was called successfully.");
+            _logger.LogInformation("User with id {UserId} successfully Update Settigs.", userId);
         }
     }
 }

@@ -26,7 +26,7 @@ namespace Application.Services
 
         public async Task DeleteAsync(int userId, int groupId, int id, CancellationToken token)
         {
-            _logger.LogInformation("Trying to call DeleteAsync.");
+            _logger.LogInformation("User with id {UserId} trying to Delete Post with id {Id}.", userId, id);
 
             var group = await _groupRepository.GetByIdAsync(groupId,token);
 
@@ -47,23 +47,23 @@ namespace Application.Services
             _postRepository.Delete(groupId, id);
             await _postRepository.SaveChangesAsync(token);
 
-            _logger.LogInformation("DeleteAsync was called successfully.");
+            _logger.LogInformation("User with id {UserId} successfully Delete Post with id {Id}.", userId, id);
         }
 
         public async Task<List<PostDto>> GetAllAsync(int userId, int chatid, int offset, int limit, CancellationToken token)
         {
-            _logger.LogInformation("Trying to call GetAllAsync.");
+            _logger.LogInformation("User with id {UserId} trying to Get All Posts.", userId);
 
             var posts = await _postRepository.GetAllAsync(userId, chatid, offset, limit,token);
 
-            _logger.LogInformation("GetAllAsync was called successfully.");
+            _logger.LogInformation("User with id {UserId} Get all Posts successfully.", userId);
 
             return _mapper.Map<List<PostDto>>(posts);
         }
 
         public async Task SendAsync(int userId, PostDto postDto, CancellationToken token)
         {
-            _logger.LogInformation("Trying to call SendAsync.");
+            _logger.LogInformation("User with id {UserId} trying to Create Post.", userId);
 
             var chat = await _groupRepository.GetByIdAsync(postDto.GroupId,token);
 
@@ -82,12 +82,12 @@ namespace Application.Services
             await _postRepository.SendAsync(post, postDto.Photos);
             await _postRepository.SaveChangesAsync(token);
 
-            _logger.LogInformation("SendAsync was called successfully.");
+            _logger.LogInformation("User with id {UserId} successfully Create Post.", userId);
         }
 
         public async Task UpdateAsync(int userId, int groupId, int id, string content, CancellationToken token)
         {
-            _logger.LogInformation("Trying to call UpdateAsync.");
+            _logger.LogInformation("User with id {UserId} trying to Update Post with id {Id}.", userId, id);
 
             var group = await _groupRepository.GetByIdAsync(groupId,token);
 
@@ -110,7 +110,7 @@ namespace Application.Services
             _postRepository.Update(post);
             await _postRepository.SaveChangesAsync(token);
 
-            _logger.LogInformation("UpdateAsync was called successfully.");
+            _logger.LogInformation("User with id {UserId} Update Post with id {Id} successfully.", userId, id);
         }
     }
 }

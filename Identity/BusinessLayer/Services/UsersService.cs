@@ -36,7 +36,7 @@ namespace BusinessLayer.Services
         public async Task<TokenDto> SignUpAsync(SignupDto userDto)
         {
             _logger.LogInformation(
-              "Trying to call SignUpAsync."
+              "Trying to SignUp user."
             );
 
             if (await _userRepository.ifAccountExistsAsync(userDto.AccountName))
@@ -67,7 +67,7 @@ namespace BusinessLayer.Services
             await _userRepository.SaveChangesAsync();
 
             _logger.LogInformation(
-              "SignUpAsync was called successfully."
+              "SignUp user was successfully."
             );
 
             return new TokenDto()
@@ -80,7 +80,7 @@ namespace BusinessLayer.Services
         public async Task<TokenDto> SignInAsync(LoginDto loginDto)
         {
             _logger.LogInformation(
-              "Trying to call SignInAsync."
+              "User trying to SignIn."
             );
 
             var user = await _userRepository.GetByAccountnameAsync(loginDto.AccountName);
@@ -97,7 +97,7 @@ namespace BusinessLayer.Services
             }
 
             _logger.LogInformation(
-              "SignInAsync was called successfully."
+              "SignIn was successfully."
             );
 
             return new TokenDto()
@@ -110,13 +110,15 @@ namespace BusinessLayer.Services
         public async Task<UserDto> GetUserAsync(int id)
         {
             _logger.LogInformation(
-              "Trying to call GetUserAsync."
+              "Trying to Get user with id {Id}.",
+              id
             );
 
             var user = await _userRepository.GetUserWithInfo(id);
 
             _logger.LogInformation(
-              "GetUserAsync was called successfully."
+              "Get User with id {Id} was successfully.",
+              id
             );
 
             return _mapper.Map<UserDto>(user);
@@ -162,14 +164,16 @@ namespace BusinessLayer.Services
         public async Task<FullUserInfoDto> GetProfileAsync(int id)
         {
             _logger.LogInformation(
-              "Trying to call GetProfileAsync."
-            );
+               "Trying to Get user profile with id {Id}.",
+               id
+             );
 
             var user = await _userRepository.GetProfileAsync(id);
 
             _logger.LogInformation(
-              "GetProfileAsync was called successfully."
-            );
+            "Get user profile with id {Id} was successfully.",
+               id
+             );
 
             return  _mapper.Map<FullUserInfoDto>(user);
         }
@@ -178,8 +182,9 @@ namespace BusinessLayer.Services
         public async Task UpdateProfileAsync(int id, FullUserInfoWithoutIdDto userDto)
         {
             _logger.LogInformation(
-              "Trying to call UpdateProfileAsync."
-            );
+               "Trying to Update user profile with id {Id}.",
+               id
+             );
 
             var user = await _userRepository.GetProfileAsync(id);
 
@@ -196,7 +201,8 @@ namespace BusinessLayer.Services
             await _userRepository.SaveChangesAsync();
 
             _logger.LogInformation(
-              "UpdateProfileAsync was called successfully."
+            "Update user profile with id {Id} was successfully.",
+              id
             );
         }
 
@@ -204,7 +210,7 @@ namespace BusinessLayer.Services
         public async Task DeleteUserAsync(int id)
         {
             _logger.LogInformation(
-              "Trying to call DeleteUserAsync."
+              "Trying to Delete user  with id {Id}.",id
             );
 
             await _userRepository.DeleteUserAsync(id);
@@ -212,7 +218,7 @@ namespace BusinessLayer.Services
             await _publishEndpoint.Publish(new UserIdForChatDto { UserId = id });
 
             _logger.LogInformation(
-              "DeleteUserAsync was called successfully."
+              "Delete User with id {Id} was called successfully.",id
             );
         }
 
@@ -220,7 +226,7 @@ namespace BusinessLayer.Services
         public async Task UpdateRoleAsync(int id, string role)
         {
             _logger.LogInformation(
-              "Trying to call UpdateRoleAsync."
+              "Trying to  Update Role of User with id {Id}.",id
             );
 
             var user = await _userRepository.GetByIdAsync(id);
@@ -234,14 +240,14 @@ namespace BusinessLayer.Services
             await _userRepository.SaveChangesAsync();
 
             _logger.LogInformation(
-              "UpdateRoleAsync was called successfully."
+              "Update Role of User with id {Id} was successfully.",id
             );
         }
 
         public async Task<List<ImageDto>> GetPhotosAsync(int id)
         {
             _logger.LogInformation(
-              "Trying to call GetPhotosAsync."
+              "Trying to call Get Photos of User with id {Id}.",id
             );
 
             var userPhotos = await _userRepository.GetUserPhotosAsync(id);
@@ -249,7 +255,7 @@ namespace BusinessLayer.Services
             var photoes = userPhotos.Select(photo=>_mapper.Map<ImageDto>(photo.Image)).ToList();
 
             _logger.LogInformation(
-              "GetPhotosAsync was called successfully."
+              "Get Photos of User with id {Id} was called successfully.",id
             );
 
             return photoes;
@@ -258,52 +264,52 @@ namespace BusinessLayer.Services
         public async Task AddPhotosAsync(int id,List<string> photosSrc)
         {
             _logger.LogInformation(
-              "Trying to call AddPhotosAsync."
+              "Trying to Add Photos of User with id {Id}.",id
             );
 
             await _userRepository.AddPhotosAsync(id,photosSrc);
 
             _logger.LogInformation(
-              "AddPhotosAsync was called successfully."
+              "Add Photos of User with id {Id} was called successfully.",id
             );
         }
 
         public async Task DeletePhotosAsync(int userId, List<int> photosId)
         {
             _logger.LogInformation(
-              "Trying to call DeletePhotosAsync."
+              "Trying to Delete Photos of User with id {Id}.",userId
             );
 
             photosId.ForEach( photoId => _userRepository.DeletePhoto(userId, photoId));
 
             _logger.LogInformation(
-              "DeletePhotosAsync was called successfully."
+              "Delete Photos of User with id {Id} was called successfully.",userId
             );
         }
 
         public async Task AddUserStatusAsync(int id, int statusId)
         {
             _logger.LogInformation(
-              "Trying to call AddUserStatusAsync."
+              "Trying to Add Status of User with id {Id}.",id
             );
 
             await _userRepository.AddUserStatusAsync(id, statusId);
 
             _logger.LogInformation(
-              "AddUserStatusAsync was called successfully."
+              "Add Status of User with id {Id} was called successfully.",id
             );
         }
 
         public async Task DeleteUserStatusAsync(int id, int statusId)
         {
             _logger.LogInformation(
-              "Trying to call DeleteUserStatusAsync."
+              "Trying to Delete Status of User with id {Id}.",id
             );
 
             await _userRepository.DeleteUserStatusAsync( id, statusId);
 
             _logger.LogInformation(
-              "DeleteUserStatusAsync was called successfully."
+              "Delete Status of User with id {Id} was called successfully.",id
             );
         }
     }

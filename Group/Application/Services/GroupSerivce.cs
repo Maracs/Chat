@@ -24,9 +24,7 @@ namespace Application.Services
 
         public async Task CreateAsync(int userId, CreateGroupDto groupDto, CancellationToken token)
         {
-            _logger.LogInformation(
-              "Trying to call CreateAsync."
-            );
+            _logger.LogInformation("User with id {UserId} trying to Create Group.", userId);
 
             if (userId != groupDto.CreatorId)
             {
@@ -37,14 +35,12 @@ namespace Application.Services
             await _groupRepository.CreateAsync(group);
             await _groupRepository.SaveChangesAsync(token);
 
-            _logger.LogInformation(
-                 "CreateAsync was called successfully."
-               );
+            _logger.LogInformation("User with id {UserId} successfully Create Group.", userId);
         }
 
         public async Task DeleteAsync(int userId, int id, CancellationToken token)
         {
-            _logger.LogInformation("Trying to call DeleteAsync.");
+            _logger.LogInformation("User with id {UserId} trying to Delete Group with id {Id}.", userId, id);
 
             var group = await _groupRepository.GetByIdAsync(id,token);
 
@@ -62,23 +58,23 @@ namespace Application.Services
             _groupRepository.Delete(id);
             await _groupRepository.SaveChangesAsync(token);
 
-            _logger.LogInformation("DeleteAsync was called successfully.");
+            _logger.LogInformation("User with id {UserId} successfully Delete Group with id {Id}.", userId, id);
         }
 
         public async Task<List<GroupDto>> GetAllAsync(int userId, int offset, int limit, CancellationToken token)
         {
-            _logger.LogInformation("Trying to call GetAllAsync.");
+            _logger.LogInformation("User with id {UserId} trying to Get All Groups.", userId);
 
             var groups = _mapper.Map<List<GroupDto>>(await _groupRepository.GetAllAsync(userId, offset, limit, token));
 
-            _logger.LogInformation("GetAllAsync was called successfully.");
+            _logger.LogInformation("User with id {UserId} Get all Groups successfully.", userId);
 
             return groups;
         }
 
         public async Task<GroupDto> GetByIdAsync(int userId, int id, CancellationToken token)
         {
-            _logger.LogInformation("Trying to call GetByIdAsync.");
+            _logger.LogInformation("User with id {UserId} trying to Get Group with id {Id}.", userId, id);
 
             var group = await _groupRepository.GetByIdAsync(id,token);
 
@@ -92,14 +88,14 @@ namespace Application.Services
                 throw new ApiException("Invalid operation", ExceptionStatus.BadRequest);
             };
 
-            _logger.LogInformation("GetByIdAsync was called successfully.");
+            _logger.LogInformation("User with id {UserId} Get Group with id {Id} successfully.", userId, id);
 
             return _mapper.Map<GroupDto>(group);
         }
 
         public async Task UpdateAsync(int userId, int id, CreateGroupDto groupDto, CancellationToken token)
         {
-            _logger.LogInformation("Trying to call UpdateAsync.");
+            _logger.LogInformation("User with id {UserId} trying to Update Group with id {Id}.", userId, id);
 
             var group = await _groupRepository.GetByIdAsync(id,token);
 
@@ -117,7 +113,7 @@ namespace Application.Services
             _groupRepository.Update(group);
             await _groupRepository.SaveChangesAsync(token);
 
-            _logger.LogInformation("UpdateAsync was called successfully.");
+            _logger.LogInformation("User with id {UserId} Update Group with id {Id} successfully.", userId, id);
         }
     }
 }

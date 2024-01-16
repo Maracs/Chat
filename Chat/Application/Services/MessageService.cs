@@ -25,7 +25,7 @@ namespace Application.Services
 
         public async Task ChangeMessageStatusAsync(int userId, int chatid, int id, string status, CancellationToken token)
         {
-            _logger.LogInformation("Trying to call ChangeMessageStatusAsync.");
+            _logger.LogInformation("User with id {UserId} trying to Change status of Message with id {Id}.", userId, id);
 
             var chat = await _chatRepository.GetByIdAsync(chatid);
             var user = chat.Users
@@ -41,12 +41,12 @@ namespace Application.Services
             token.ThrowIfCancellationRequested();
             await _messageRepository.SaveChangesAsync();
 
-            _logger.LogInformation("ChangeMessageStatusAsync was called successfully.");
+            _logger.LogInformation("User with id { UserId} successfully Change status of  Message with id { Id}.", userId, id);
         }
 
         public async Task DeleteAsync(int userId, int chatid, int id, CancellationToken token)
         {
-            _logger.LogInformation("Trying to call DeleteAsync.");
+            _logger.LogInformation("User with id {UserId} trying to Delete Message with id {Id}.", userId, id);
 
             var chat = await _chatRepository.GetByIdAsync(chatid);
             var user = chat.Users
@@ -62,24 +62,24 @@ namespace Application.Services
             token.ThrowIfCancellationRequested();
             await _messageRepository.SaveChangesAsync();
 
-            _logger.LogInformation("DeleteAsync was called successfully.");
+            _logger.LogInformation("User with id {UserId} successfully Delete Message with id {Id}.", userId, id);
         }
 
         public async Task<List<MessageDto>> GetAllAsync(int userId, int chatid, int offset, int limit, CancellationToken token)
         {
-            _logger.LogInformation("Trying to call GetAllAsync.");
+            _logger.LogInformation("User with id {UserId} trying to Get All Messages.", userId);
 
             var messages = await _messageRepository.GetAllAsync(userId, chatid, offset, limit);
             token.ThrowIfCancellationRequested();
 
-            _logger.LogInformation("GetAllAsync was called successfully.");
+            _logger.LogInformation("User with id {UserId} Get all Messages successfully.", userId);
 
             return _mapper.Map<List<MessageDto>>(messages);
         }
 
         public async Task SendAsync(int userId, MessageDto messageDto, CancellationToken token)
         {
-            _logger.LogInformation("Trying to call SendAsync.");
+            _logger.LogInformation("User with id {UserId} trying to Create Message.", userId);
 
             if (userId != messageDto.UserId)
             {
@@ -93,12 +93,12 @@ namespace Application.Services
             token.ThrowIfCancellationRequested();
             await _messageRepository.SaveChangesAsync();
 
-            _logger.LogInformation("SendAsync was called successfully.");
+            _logger.LogInformation("User with id {UserId} successfully Create Message.", userId);
         }
 
         public async Task UpdateAsync(int userId, int chatid, int id, string content, CancellationToken token)
         {
-            _logger.LogInformation("Trying to call UpdateAsync.");
+            _logger.LogInformation("User with id {UserId} trying to Update Message with id {Id}.", userId, id);
 
             var chat = await _chatRepository.GetByIdAsync(chatid);
             var user = chat.Users
@@ -117,7 +117,7 @@ namespace Application.Services
             token.ThrowIfCancellationRequested();
             await _messageRepository.SaveChangesAsync();
 
-            _logger.LogInformation("UpdateAsync was called successfully.");
+            _logger.LogInformation("User with id {UserId} Update Message with id {Id} successfully.", userId, id);
         }
     }
 }

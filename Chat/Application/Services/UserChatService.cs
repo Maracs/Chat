@@ -22,7 +22,8 @@ namespace Application.Services
 
         public async Task CreateAsync(int userId, UserChatDto userChatDto, CancellationToken token)
         {
-            _logger.LogInformation("Trying to call CreateAsync.");
+            _logger.LogInformation("User with id {UserId} trying to Add User with id {Id} in Chat with id {Id}.", userId, userChatDto.UserId, userChatDto.ChatId);
+
 
             var creatorId = (await _chatRepository.GetByIdAsync(userChatDto.ChatId)).CreatorId;
 
@@ -35,12 +36,12 @@ namespace Application.Services
             token.ThrowIfCancellationRequested();
             await _userChatRepository.SaveChangesAsync();
 
-            _logger.LogInformation("CreateAsync was called successfully.");
+            _logger.LogInformation("User with id {UserId} Add User with id {Id} in Chat with id {Id} successfully.", userId, userChatDto.UserId, userChatDto.ChatId);
         }
 
         public async Task DeleteAsync(int userId, UserChatDto userChatDto, CancellationToken token)
         {
-            _logger.LogInformation("Trying to call DeleteAsync.");
+            _logger.LogInformation("User with id {UserId} trying to Delete User with id {Id} from Chat with id {Id}.", userId, userChatDto.UserId, userChatDto.ChatId);
 
             var creatorId = (await _chatRepository.GetByIdAsync(userChatDto.ChatId)).CreatorId;
 
@@ -53,7 +54,7 @@ namespace Application.Services
             token.ThrowIfCancellationRequested();
             await _userChatRepository.SaveChangesAsync();
 
-            _logger.LogInformation("DeleteAsync was called successfully.");
+            _logger.LogInformation("User with id {UserId} Delete User with id {Id} from Chat with id {Id} successfully.", userId, userChatDto.UserId, userChatDto.ChatId);
         }
     }
 }
