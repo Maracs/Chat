@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
 using StackExchange.Redis;
 
-namespace BusinessLayer.Middlewares
+namespace PresentationLayer.Middlewares
 {
     public class UserCacheMiddleware
     {

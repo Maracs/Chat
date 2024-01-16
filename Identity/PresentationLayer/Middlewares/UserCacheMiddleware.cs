@@ -2,8 +2,7 @@
 using DataAccessLayer.Contracts;
 using Microsoft.AspNetCore.Http;
 
-
-namespace BusinessLayer.Middlewares
+namespace PresentationLayer.Middlewares
 {
     public class UserCacheMiddleware
     {

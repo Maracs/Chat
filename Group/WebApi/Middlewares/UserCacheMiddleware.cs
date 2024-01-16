@@ -42,17 +42,17 @@ namespace WebApi.Middlewares
             var key = GetKey(userId);
             SetData(key, timestamp.ToString(), TimeSpan.FromSeconds(10));
         }
+
         private bool SetData<T>(string key, T value, TimeSpan expirationTime)
         {
             var isSet = _db.StringSet(key, JsonConvert.SerializeObject(value), expirationTime);
 
             return isSet;
         }
+
         private string GetKey(string userId)
         {
             return $"{_userRequestsKey}:{userId}";
         }
-
-
     }
 }

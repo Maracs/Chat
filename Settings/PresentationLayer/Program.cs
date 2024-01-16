@@ -1,12 +1,13 @@
 using BusinessLayer.AutoMapperProfile;
 using BusinessLayer.Contracts;
 using BusinessLayer.Extensions;
-using BusinessLayer.Middlewares;
+using PresentationLayer.Middlewares;
 using BusinessLayer.Services;
 using DataAccessLayer.Extensions;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using System.Reflection;
+using PresentationLayer.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 

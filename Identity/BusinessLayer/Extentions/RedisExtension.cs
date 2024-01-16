@@ -3,7 +3,6 @@ using DataAccessLayer.Repositories;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-
 namespace BusinessLayer.Extentions
 {
     public static class RedisExtensions
@@ -17,6 +16,7 @@ namespace BusinessLayer.Extentions
             services.AddSingleton<IUserRequestRepository>(
                 provider => new UserRequestRepository(connectionString)
             );
+
             return services;
         }
     }

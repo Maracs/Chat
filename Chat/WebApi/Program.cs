@@ -51,7 +51,7 @@ namespace WebApi
 
             app.UseAuthentication();
             app.UseAuthorization();
-            //app.UseExceptionHandlerMiddleware();
+            app.UseExceptionHandlerMiddleware();
             app.UseMiddleware<UserCacheMiddleware>(builder.Configuration["Redis:ConnectionString"]);
             app.MapControllers();
             app.Run();

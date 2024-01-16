@@ -20,12 +20,9 @@ namespace DataAccessLayer.Repositories
             var key = GetKey(userId);
             var timestampString = GetData(key);
 
-            if (!string.IsNullOrEmpty(timestampString))
+            if (!string.IsNullOrEmpty(timestampString) && DateTime.TryParse(timestampString, out DateTime timestamp))
             {
-                if (DateTime.TryParse(timestampString, out DateTime timestamp))
-                {
                     return timestamp;
-                }
             }
 
             return null;
@@ -42,6 +39,7 @@ namespace DataAccessLayer.Repositories
             var key = GetKey(userId);
             RemoveData(key);
         }
+
         private string GetData(string key)
         {
             var value = _db.StringGet(key);
@@ -61,7 +59,7 @@ namespace DataAccessLayer.Repositories
             return isSet;
         }
 
-        private object RemoveData(string key)
+        private bool RemoveData(string key)
         {
             bool _isKeyExist = _db.KeyExists(key);
 

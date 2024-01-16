@@ -1,10 +1,6 @@
 ﻿using AutoMapper;
 using DataAccessLayer.Contracts;
 using DataAccessLayer.Entities;
-using Microsoft.Extensions.Configuration;
-using Newtonsoft.Json;
-using StackExchange.Redis;
-
 
 namespace BusinessLayer.AutoMapperProfiles.Resolvers
 {

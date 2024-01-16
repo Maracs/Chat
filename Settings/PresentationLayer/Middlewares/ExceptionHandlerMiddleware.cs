@@ -1,9 +1,10 @@
-﻿using FluentValidation;
-using BusinessLayer.Exceptions;
+﻿using BusinessLayer.Exceptions;
+using FluentValidation;
 using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
 
-namespace BusinessLayer.Middlewares
+
+namespace PresentationLayer.Middlewares
 {
     public class ExceptionHandlerMiddleware
     {
