@@ -1,7 +1,6 @@
 ﻿using BusinessLayer.Middlewares;
 using Microsoft.AspNetCore.Builder;
 
-
 namespace BusinessLayer.Extentions
 {
     public static class ExceptionHandlerExtension

@@ -4,7 +4,10 @@ using Application.Ports.Services;
 using AutoMapper;
 using Domain.Entities;
 using Domain.Interfaces;
+using Grpc.Dtos;
+using Grpc.Interfaces;
 using Microsoft.Extensions.Logging;
+
 
 namespace Application.Services
 {
@@ -12,13 +15,16 @@ namespace Application.Services
     {
         private readonly IChatRepository _chatRepository;
         private readonly IMapper _mapper;
+        private readonly IUserNicknameService _userNicknameService;
         private readonly ILogger<ChatService> _logger;
 
-        public ChatService(IChatRepository chatRepository, IMapper mapper, ILogger<ChatService> logger)
+        public ChatService(IChatRepository chatRepository, IMapper mapper, ILogger<ChatService> logger, IUserNicknameService userNicknameService))
         {
             _chatRepository = chatRepository;
             _mapper = mapper;
             _logger = logger;
+             _userNicknameService = userNicknameService;
+
         }
 
         public async Task CreateAsync(int userId, CreateChatDto chatDto, CancellationToken token)
@@ -72,7 +78,7 @@ namespace Application.Services
             return chats;
         }
 
-        public async Task<ChatDto> GetByIdAsync(int userId, int id, CancellationToken token)
+        public async Task<ChatWithUserNicknameDto> GetByIdAsync(int userId, int id, CancellationToken token)
         {
             _logger.LogInformation("User with id {UserId} trying to Get Chat with id {Id}.",userId,id);
 
@@ -85,9 +91,12 @@ namespace Application.Services
 
             token.ThrowIfCancellationRequested();
 
+            var userNickname = await _userNicknameService.GetUserNicknameAsync(new UserIdDto() { Id = userId });
+            var chatDto = _mapper.Map<ChatWithUserNicknameDto>(chat);
+            chatDto = _mapper.Map(userNickname, chatDto);
             _logger.LogInformation("User with id {UserId} Get Chat with id {Id} successfully.", userId, id);
 
-            return _mapper.Map<ChatDto>(chat);
+            return chatDto;
         }
 
         public async Task UpdateAsync(int userId, int id, CreateChatDto chatDto, CancellationToken token)

@@ -20,7 +20,7 @@ namespace WebApi.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<GroupDto>> GetByIdAsync([FromRoute] int id, CancellationToken token)
+        public async Task<ActionResult<GroupWithUserNicknameDto>> GetByIdAsync([FromRoute] int id, CancellationToken token)
         {
             var userId = User.GetUserId();
 

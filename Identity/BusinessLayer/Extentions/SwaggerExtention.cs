@@ -1,12 +1,10 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
 
-
 namespace BusinessLayer.Extentions
 {
     public static class SwaggerExtention
     {
-
         public static IServiceCollection AddSwaggerService
             (this IServiceCollection services)
         {

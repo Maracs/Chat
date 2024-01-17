@@ -12,7 +12,12 @@ using FluentValidation.AspNetCore;
 using Microsoft.EntityFrameworkCore;
 using DotNetEnv;
 using DotNetEnv.Configuration;
+using Microsoft.AspNetCore.Server.Kestrel.Core;
+using System.Net;
+using Microsoft.Extensions.Configuration;
+using ProtoBuf.Grpc.Configuration;
 using System.Reflection;
+
 
 namespace PresentationLayer
 {
@@ -41,13 +46,11 @@ namespace PresentationLayer
             builder.Services.AddAutoMapper(typeof(StatusesProfile).Assembly);
             builder.Services.AddAutoMapper(typeof(UsersProfile).Assembly);
 
-
             builder.Services.AddScoped<BlockingsRepository>();
             builder.Services.AddScoped<FriendsRepository>();
             builder.Services.AddScoped<RolesRepository>();
             builder.Services.AddScoped<StatusesRepository>();
             builder.Services.AddScoped<UsersRepository>();
-
 
             builder.Services.AddScoped<IBlockingsService, BlockingsService>();
             builder.Services.AddScoped<IFriendsService, FriendsService>();
@@ -73,8 +76,15 @@ namespace PresentationLayer
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
             builder.Services.ConfigureMassTransit(builder.Configuration);
+            builder.Services.ReristerRrpcService();
 
             var app = builder.Build();
+
+            app.UseCors();
+            app.UseRouting();
+            app.UseAuthentication();
+            app.UseAuthorization();
+            app.UseGrpcService();
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment() || app.Environment.EnvironmentName=="Docker")
@@ -84,13 +94,9 @@ namespace PresentationLayer
             }
 
             app.UseExceptionHandlerMiddleware();
-
             app.UseAuthentication();
             app.UseAuthorization();
-
-
             app.MapControllers();
-
             app.Run();
         }
     }

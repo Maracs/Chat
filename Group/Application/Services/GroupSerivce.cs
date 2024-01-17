@@ -4,8 +4,11 @@ using Application.Ports.Services;
 using AutoMapper;
 using Domain.Entities;
 using Domain.Interfaces;
+using Grpc.Dtos;
+using Grpc.Interfaces;
 using Microsoft.Extensions.Logging;
 using System;
+
 
 namespace Application.Services
 {
@@ -13,13 +16,15 @@ namespace Application.Services
     {
         private readonly IGroupRepository _groupRepository;
         private readonly IMapper _mapper;
+        private readonly IUserNicknameService _userNicknameService;
         private readonly ILogger<GroupService> _logger;
 
-        public GroupService(IGroupRepository groupRepository, IMapper mapper, ILogger<GroupService> logger)
+        public GroupService(IGroupRepository groupRepository, IMapper mapper, ILogger<GroupService> logger, IUserNicknameService userNicknameService)
         {
             _groupRepository = groupRepository;
             _mapper = mapper;
             _logger = logger;
+            _userNicknameService = userNicknameService;
         }
 
         public async Task CreateAsync(int userId, CreateGroupDto groupDto, CancellationToken token)
@@ -72,7 +77,7 @@ namespace Application.Services
             return groups;
         }
 
-        public async Task<GroupDto> GetByIdAsync(int userId, int id, CancellationToken token)
+        public async Task<GroupWithUserNicknameDto> GetByIdAsync(int userId, int id, CancellationToken token)
         {
             _logger.LogInformation("User with id {UserId} trying to Get Group with id {Id}.", userId, id);
 
@@ -88,9 +93,12 @@ namespace Application.Services
                 throw new ApiException("Invalid operation", ExceptionStatus.BadRequest);
             };
 
+            var userNickname = await _userNicknameService.GetUserNicknameAsync(new UserIdDto() { Id = userId });
+            var groupDto = _mapper.Map<GroupWithUserNicknameDto>(group);
+            groupDto = _mapper.Map(userNickname, groupDto);
             _logger.LogInformation("User with id {UserId} Get Group with id {Id} successfully.", userId, id);
 
-            return _mapper.Map<GroupDto>(group);
+            return groupDto;
         }
 
         public async Task UpdateAsync(int userId, int id, CreateGroupDto groupDto, CancellationToken token)

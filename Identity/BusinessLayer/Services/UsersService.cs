@@ -5,8 +5,10 @@ using BusinessLayer.Interfaces;
 using DataAccessLayer.Entities;
 using DataAccessLayer.Repositories;
 using MassTransit;
+using System.Linq.Expressions;
 using Microsoft.Extensions.Logging;
 using Shared;
+
 
 namespace BusinessLayer.Services
 {

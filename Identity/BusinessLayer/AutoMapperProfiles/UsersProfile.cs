@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using BusinessLayer.DTOs;
 using DataAccessLayer.Entities;
-
+using Grpc.DTOs;
 
 namespace BusinessLayer.AutoMapperProfiles
 {
@@ -27,6 +27,9 @@ namespace BusinessLayer.AutoMapperProfiles
               .ForMember(dest => dest.Role, opt => opt.MapFrom(src => src.Role.Name));
 
             CreateMap<FullUserInfoWithoutIdDto, UserInfo>();
+
+            CreateMap<User, UserNicknameDto>()
+                .ForMember(dest => dest.NickName, opt => opt.MapFrom(src => src.UserInfo.Nickname));
         }
     }
 }

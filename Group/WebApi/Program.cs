@@ -28,10 +28,13 @@ namespace WebApi
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
             builder.Services.ConfigureMassTransit(builder.Configuration);
+            builder.Services.RegisterGrpcClient(builder.Configuration);
+            builder.Services.ConfigureHttpClient(builder.Configuration);
             builder.Services.ConfigureLogging(builder, Assembly.GetExecutingAssembly().GetName().Name!);
 
             var app = builder.Build();
 
+            app.UseCors();
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment() || app.Environment.EnvironmentName == "Docker")
             {
