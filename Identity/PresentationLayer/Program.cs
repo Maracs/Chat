@@ -16,6 +16,8 @@ using Microsoft.AspNetCore.Server.Kestrel.Core;
 using System.Net;
 using Microsoft.Extensions.Configuration;
 using ProtoBuf.Grpc.Configuration;
+using System.Reflection;
+
 
 namespace PresentationLayer
 {
@@ -59,6 +61,8 @@ namespace PresentationLayer
 
             builder.Services.AddIdentityService(builder.Configuration);
             builder.Services.AddSwaggerService();
+
+            builder.Services.ConfigureLogging(builder,Assembly.GetExecutingAssembly().GetName().Name!);
 
             builder.Services.AddControllers();
 

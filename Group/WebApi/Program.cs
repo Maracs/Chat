@@ -2,6 +2,7 @@ using Application.Extentions;
 using Application.AutoMapperProfiles;
 using WebApi.Extentions;
 using Application.Extensions;
+using System.Reflection;
 
 namespace WebApi
 {
@@ -29,6 +30,8 @@ namespace WebApi
             builder.Services.ConfigureMassTransit(builder.Configuration);
             builder.Services.RegisterGrpcClient(builder.Configuration);
             builder.Services.ConfigureHttpClient(builder.Configuration);
+            builder.Services.ConfigureLogging(builder, Assembly.GetExecutingAssembly().GetName().Name!);
+
             var app = builder.Build();
 
             app.UseCors();
