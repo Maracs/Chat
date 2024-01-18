@@ -5,7 +5,7 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 
 
-namespace BusinessLayer.Middlewares
+namespace PresentationLayer.Middlewares
 {
     public class ExceptionHandlerMiddleware
     {

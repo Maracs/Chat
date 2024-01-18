@@ -4,6 +4,7 @@ using Domain.Interfaces;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using Infrastructure.Repositories;
+using StackExchange.Redis;
 using System.Reflection;
 using System.Text.RegularExpressions;
 
@@ -11,6 +12,17 @@ namespace WebApi
 {
     public static class Startup
     {
+        public static void ConfigureRedis(this IServiceCollection services, string connectionString)
+        {
+            var configurationOptions = ConfigurationOptions.Parse(connectionString);
+
+            services.AddScoped<IDatabase>(options =>
+            {
+                IConnectionMultiplexer multiplexer = ConnectionMultiplexer.Connect(configurationOptions);
+                return multiplexer.GetDatabase();
+            });
+        }
+
         public static void ConfigureServices(this IServiceCollection services)
         {
             services.AddScoped<IChatService, ChatService>();

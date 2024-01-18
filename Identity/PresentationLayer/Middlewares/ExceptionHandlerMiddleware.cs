@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
 using Microsoft.Extensions.Logging;
 
-namespace BusinessLayer.Middlewares
+namespace PresentationLayer.Middlewares
 {
     public class ExceptionHandlerMiddleware
     {

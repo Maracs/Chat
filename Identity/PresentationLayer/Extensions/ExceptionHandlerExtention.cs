@@ -1,7 +1,9 @@
-﻿using BusinessLayer.Middlewares;
+﻿using PresentationLayer.Middlewares;
 using Microsoft.AspNetCore.Builder;
 
-namespace BusinessLayer.Extentions
+
+
+namespace PresentationLayer.Extentions
 {
     public static class ExceptionHandlerExtension
     {

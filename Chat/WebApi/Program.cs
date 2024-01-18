@@ -7,6 +7,7 @@ using WebApi.Extentions;
 using DotNetEnv;
 using DotNetEnv.Configuration;
 using System.Reflection;
+using WebApi.Middlewares;
 
 namespace WebApi
 {
@@ -39,6 +40,7 @@ namespace WebApi
             builder.Services.ConfigureValidation();
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+            builder.Services.ConfigureRedis(builder.Configuration["Redis:ConnectionString"]);
             builder.Services.ConfigureMassTransit(builder.Configuration);
 
             builder.Services.RegisterGrpcClient(builder.Configuration);
@@ -55,9 +57,11 @@ namespace WebApi
                 app.UseSwaggerUI();
             }
 
-            app.UseExceptionHandlerMiddleware();
+
             app.UseAuthentication();
             app.UseAuthorization();
+            app.UseExceptionHandlerMiddleware();
+            app.UseMiddleware<UserCacheMiddleware>();
             app.MapControllers();
             app.Run();
         }

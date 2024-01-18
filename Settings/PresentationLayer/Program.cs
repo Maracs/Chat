@@ -1,11 +1,13 @@
 using BusinessLayer.AutoMapperProfile;
 using BusinessLayer.Contracts;
 using BusinessLayer.Extensions;
+using PresentationLayer.Middlewares;
 using BusinessLayer.Services;
 using DataAccessLayer.Extensions;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using System.Reflection;
+using PresentationLayer.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -29,6 +31,7 @@ builder.Services.AddScoped<ISettingsService,SettingsService>();
 builder.Services.AddFluentValidationAutoValidation();
 builder.Services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
 builder.Services.ConfigureLogging(builder, Assembly.GetExecutingAssembly().GetName().Name!);
+builder.Services.ConfigureRedis(builder.Configuration["Redis:ConnectionString"]);
 
 
 var app = builder.Build();
@@ -40,9 +43,10 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseExceptionHandlerMiddleware();
 app.UseAuthentication();
 app.UseAuthorization();
+app.UseExceptionHandlerMiddleware();
+app.UseMiddleware<UserCacheMiddleware>();
 
 app.MapControllers();
 

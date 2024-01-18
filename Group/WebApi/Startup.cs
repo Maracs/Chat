@@ -8,12 +8,24 @@ using Infrastructure.Repositories;
 using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using DotNetEnv;
+using StackExchange.Redis;
 
 
 namespace WebApi
 {
     public static class Startup
     {
+        public static void ConfigureRedis(this IServiceCollection services,string connectionString)
+        {
+            var configurationOptions = ConfigurationOptions.Parse(connectionString);
+
+            services.AddScoped<IDatabase>(options =>
+            {
+                IConnectionMultiplexer multiplexer = ConnectionMultiplexer.Connect(configurationOptions);
+                return multiplexer.GetDatabase();
+            });
+        }
+
         public static void ConfigureDataBase(this IServiceCollection services,ConfigurationManager configuration)
         {
 

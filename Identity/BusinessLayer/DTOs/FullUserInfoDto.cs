@@ -10,5 +10,6 @@
         public string? UserLastName { get; set; }
         public string? UserPhone { get; set; }
         public string? UserFirstName { get; set; }
+        public bool IsOnline { get; set; }
     }
 }
