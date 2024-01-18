@@ -11,11 +11,10 @@ namespace PresentationLayer.Middlewares
         private readonly string _userRequestsKey;
         private IDatabase _db;
 
-        public UserCacheMiddleware(RequestDelegate next, string connectionString)
+        public UserCacheMiddleware(RequestDelegate next, IDatabase db)
         {
             _next = next;
-            var configurationOptions = ConfigurationOptions.Parse(connectionString);
-            _db = ConnectionMultiplexer.Connect(configurationOptions).GetDatabase();
+            _db = db;
             _userRequestsKey = "latest_user_requests";
         }
 

@@ -27,6 +27,7 @@ namespace WebApi
             builder.Services.ConfigureValidation();
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+            builder.Services.ConfigureRedis(builder.Configuration["Redis:ConnectionString"]);
             builder.Services.ConfigureMassTransit(builder.Configuration);
             var app = builder.Build();
 
@@ -39,8 +40,8 @@ namespace WebApi
 
             app.UseAuthentication();
             app.UseAuthorization();
-            //app.UseExceptionHandlerMiddleware();
-            app.UseMiddleware<UserCacheMiddleware>(builder.Configuration["Redis:ConnectionString"]);
+            app.UseExceptionHandlerMiddleware();
+            app.UseMiddleware<UserCacheMiddleware>();
             app.MapControllers();
             app.Run();
         }

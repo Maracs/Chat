@@ -30,7 +30,7 @@ builder.Services.AddSwaggerService();
 builder.Services.AddScoped<ISettingsService,SettingsService>();
 builder.Services.AddFluentValidationAutoValidation();
 builder.Services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
-
+builder.Services.ConfigureRedis(builder.Configuration["Redis:ConnectionString"]);
 
 
 var app = builder.Build();
@@ -45,7 +45,7 @@ if (app.Environment.IsDevelopment())
 app.UseAuthentication();
 app.UseAuthorization();
 app.UseExceptionHandlerMiddleware();
-app.UseMiddleware<UserCacheMiddleware>(builder.Configuration["Redis:ConnectionString"]);
+app.UseMiddleware<UserCacheMiddleware>();
 
 app.MapControllers();
 
